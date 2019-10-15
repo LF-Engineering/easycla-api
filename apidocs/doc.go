@@ -23,7 +23,7 @@ func (o *GetDocOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produc
 	html := `<!DOCTYPE html>
     <html lang="en">
 	  <head>
-		<title>CLA Service Doc</title>
+		<title>CLA API Service Doc</title>
 		<!-- needed for adaptive design -->
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -41,7 +41,7 @@ func (o *GetDocOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produc
 		</style>
 	  </head>
 	  <body>
-		<redoc spec-url='/v3/swagger.json'></redoc>
+		<redoc spec-url='/v4/swagger.json'></redoc>
 		<script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
 	  </body>
 	</html>`
