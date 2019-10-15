@@ -37,7 +37,7 @@ paths:
     get:
       summary: API Health Check
       security: []
-      description: The health of the organization service
+      description: The health and status of the EasyCLA API service
       operationId: getHealth
       produces:
         - application/json
@@ -69,6 +69,7 @@ paths:
     get:
       security: []
       summary: Get swagger documentation
+      description: Renders the API Documentation has an interactive HTML page.
       operationId: getDoc
       produces:
         - text/html
@@ -82,6 +83,7 @@ paths:
     get:
       security: []
       summary: Get swagger JSON
+      description: Returns the swagger specification as a JSON document.
       operationId: getSwagger
       produces:
         - application/json
@@ -98,18 +100,31 @@ definitions:
     title: Health
     properties:
       TimeStamp:
+        description: The overall timestamp of the health check
+        example: "2019-10-15T16:06:15Z"
         type: string
       Status:
+        description: The overall status of the health check
+        example: "healthy"
         type: string
       Version:
+        description: The version tag of the service related to this health check
+        example: "v0.1.35"
         type: string
       Githash:
+        description: The git hash of the service related to this health check
+        example: "e96f055"
         type: string
       Branch:
+        description: The git branch of the service related to this health check
+        example: "master"
         type: string
       BuildTimeStamp:
+        description: The build timestamp of the service related to this health check
+        example: "2019-10-15T09:05:34-0700"
         type: string
       Healths:
+        description: An array of components or sub-components for this health check
         type: array
         items:
           $ref: '#/definitions/health-status'
@@ -118,14 +133,24 @@ definitions:
     type: object
     properties:
       Name:
+        description: The name of the component or sub-component related to this health check.
+        example: "CLA - DynamoDB"
         type: string
       Duration:
+        description: The time it took to gather the health status
+        example: "8.481802ms"
         type: string
       Healthy:
+        description: A flag indicating if this health status is health or not
+        example: true
         type: boolean
       Error:
+        description: An optional error message indicating the reason for the failed health check.
+        example: "unable to connect to database - permission denied"
         type: string
       TimeStamp:
+        example: "2019-10-15T16:07:43Z"
+        description: The timestamp of the health check
         type: string
     title: Health Status
 
