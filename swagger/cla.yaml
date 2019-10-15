@@ -1,0 +1,169 @@
+# Copyright The Linux Foundation and each contributor to CommunityBridge.
+# SPDX-License-Identifier: MIT
+swagger: '2.0'
+info:
+  title: EasyCLA API
+  version: '1.0.0'
+basePath: /v4
+schemes:
+  - http
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+#securityDefinitions:
+#  OauthSecurity:
+#    type: oauth2
+#    flow: accessCode
+#    authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth'
+#    tokenUrl: 'https://www.googleapis.com/oauth2/v4/token'
+#    scopes:
+#      admin: LF Admin scope
+#      project: Project Manager scope
+#      company: CLA Manager scope
+#      contrib: Contributor scope
+
+#security:
+#  - OauthSecurity: []
+
+tags:
+  - name: service
+  - name: easycla
+
+paths:
+  /ops/health:
+    get:
+      summary: API Health Check
+      security: []
+      description: The health of the organization service
+      operationId: getHealth
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: 'Success'
+          headers:
+            X-REQUEST-ID:
+              type: string
+              description: Request ID
+          schema:
+            $ref: '#/definitions/health'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+        '503':
+          description: ''
+          schema:
+            $ref: '#/definitions/health'
+      tags:
+        - health
+
+  /api-docs:
+    get:
+      security: []
+      summary: Get swagger documentation
+      operationId: getDoc
+      produces:
+        - text/html
+      responses:
+        200:
+          description: Success
+      tags:
+        - docs
+
+  /swagger.json:
+    get:
+      security: []
+      summary: Get swagger JSON
+      operationId: getSwagger
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Success
+      tags:
+        - docs
+
+
+definitions:
+  health:
+    type: object
+    title: Health
+    properties:
+      TimeStamp:
+        type: string
+      Status:
+        type: string
+      Version:
+        type: string
+      Githash:
+        type: string
+      Branch:
+        type: string
+      BuildTimeStamp:
+        type: string
+      Healths:
+        type: array
+        items:
+          $ref: '#/definitions/health-status'
+
+  health-status:
+    type: object
+    properties:
+      Name:
+        type: string
+      Duration:
+        type: string
+      Healthy:
+        type: boolean
+      Error:
+        type: string
+      TimeStamp:
+        type: string
+    title: Health Status
+
+  error-response:
+    type: object
+    title: Error Response
+    description: Standard error format
+    properties:
+      Code:
+        type: string
+        description: The code for the error response
+        example: "403"
+        pattern: '^([1-9][\d]+){1,}$'
+      Message:
+        type: string
+        description: The message for the error response
+        example: "Not authorized"
+        pattern: '^([\w\d\s\-\,\./]+){2,}$'
+
+responses:
+  unauthorized:
+    description: Unauthorized
+    schema:
+      $ref: '#/definitions/error-response'
+  invalid-request:
+    description: Invalid request
+    schema:
+      $ref: '#/definitions/error-response'
+  forbidden:
+    description: Insufficient privilege to execute action.
+    schema:
+      $ref: '#/definitions/error-response'
+  not-found:
+    description: Not found
+    schema:
+      $ref: '#/definitions/error-response'
+  #conflict:
+  #  description: The request could not be completed due to a conflict with the current state of the target resource.
+  #  schema:
+  #    $ref: '#/definitions/error-response'
+

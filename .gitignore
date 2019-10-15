@@ -10,3 +10,24 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Ignore the swagger generated folder
+gen/
+
+# IntelliJ Idea specific files
+*.iml
+*.ipr
+*.iws
+*.idea
+out/
+
+# VS Code
+.vscode/*
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Mac
+.DS_Store
+**/.DS_Store
