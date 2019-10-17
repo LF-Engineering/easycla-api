@@ -83,6 +83,8 @@ func server(localMode bool) http.Handler {
 	log.Infof("Service Host            : %s", host)
 	log.Infof("Service Port            : %d", *portFlag)
 	log.Infof("Sender email address is : %s", configFile.SenderEmailAddress)
+	log.Infof("RDS Database            : %s", configFile.RDSDatabase)
+	log.Infof("RDS Username            : %s", configFile.RDSUsername)
 
 	swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
 	if err != nil {

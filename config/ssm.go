@@ -138,6 +138,33 @@ func loadSSMConfig(awsSession *session.Session, stage string) (Config, error) {
 		return Config{}, err
 	}
 
+	rdsDatabase, err := ssmClient.GetParameter(&ssm.GetParameterInput{
+		Name:           aws.String(fmt.Sprintf("cla-rds-database-%s", stage)),
+		WithDecryption: aws.Bool(false),
+	})
+	if err != nil {
+		return Config{}, err
+	}
+	config.RDSDatabase = *rdsDatabase.Parameter.Value
+
+	rdsUsername, err := ssmClient.GetParameter(&ssm.GetParameterInput{
+		Name:           aws.String(fmt.Sprintf("cla-rds-username-%s", stage)),
+		WithDecryption: aws.Bool(false),
+	})
+	if err != nil {
+		return Config{}, err
+	}
+	config.RDSUsername = *rdsUsername.Parameter.Value
+
+	rdsPassword, err := ssmClient.GetParameter(&ssm.GetParameterInput{
+		Name:           aws.String(fmt.Sprintf("cla-rds-password-%s", stage)),
+		WithDecryption: aws.Bool(false),
+	})
+	if err != nil {
+		return Config{}, err
+	}
+	config.RDSPassword = *rdsPassword.Parameter.Value
+
 	config.SenderEmailAddress = *senderEmailAddress.Parameter.Value
 
 	config.AllowedOriginsCommaSeparated = *allowedOrigins.Parameter.Value

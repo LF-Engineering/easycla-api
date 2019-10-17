@@ -17,18 +17,15 @@ TEST_ENV=AWS_REGION=us-east-1 AWS_ACCESS_KEY_ID=foo AWS_SECRET_ACCESS_KEY=bar
 
 generate: swagger
 
-setup: $(LINT_TOOL) setup_dev setup_deploy
+setup: $(LINT_TOOL) setup_dev
+	mkdir -p bin
 
 setup_dev:
 	go get -u github.com/go-swagger/go-swagger/cmd/swagger
 	go get -u golang.org/x/tools/cmd/goimports
 	go get -u github.com/golang/dep/cmd/dep	
-	go get golang.org/x/tools/cmd/cover
 	go get -u github.com/amacneil/dbmate
 	go get -u github.com/stripe/safesql
-
-setup_deploy:
-	npm install serverless
 
 clean:
 	rm -rf ./gen ./bin
@@ -57,16 +54,19 @@ deps:
 	dep ensure -v
 
 build: deps
-	env GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o $(SERVICE_NAME) main.go
-	chmod +x $(SERVICE_NAME)
+	mkdir -p bin
+	env GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o bin/$(SERVICE_NAME) main.go
+	chmod +x bin/$(SERVICE_NAME)
 
 build-mac: deps
-	env GOOS=darwin GOARCH=amd64 go build $(LDFLAGS) -o $(SERVICE_NAME) main.go
-	chmod +x $(SERVICE_NAME)
+	mkdir -p bin
+	env GOOS=darwin GOARCH=amd64 go build $(LDFLAGS) -o bin/$(SERVICE_NAME) main.go
+	chmod +x bin/$(SERVICE_NAME)
 
 build-aws-lambda: deps
-	env GOOS=linux GOARCH=amd64 go build $(LDFLAGS) $(BUILD_TAGS) -o backend_aws_lambda main.go
-	chmod +x backend_aws_lambda
+	mkdir -p bin
+	env GOOS=linux GOARCH=amd64 go build $(LDFLAGS) $(BUILD_TAGS) -o bin/$(SERVICE_NAME) main.go
+	chmod +x bin/$(SERVICE_NAME)
 
 $(LINT_TOOL):
 	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.18.0

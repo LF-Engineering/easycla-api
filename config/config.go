@@ -43,6 +43,11 @@ type Config struct {
 	AllowedOrigins               []string `json:"-"`
 
 	CorporateConsoleURL string `json:"corporateConsoleURL"`
+
+	// RDS
+	RDSDatabase string `json:"rdsDatabase"`
+	RDSUsername string `json:"rdsUsername"`
+	RDSPassword string `json:"rdsPassword"`
 }
 
 // Auth0 model
