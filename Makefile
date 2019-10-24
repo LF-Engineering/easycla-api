@@ -74,4 +74,8 @@ $(LINT_TOOL):
 lint: $(LINT_TOOL)
 	$(LINT_TOOL) run --config=.golangci.yaml ./...
 
+safesql:
+	safesql -v $(GO_FILES)
+	#$(GOPATH)/src/github.com/communitybridge/safesql/bin/safesql -v $(GO_PKGS)
+
 all: clean swagger swagger-validate deps fmt build-mac test lint
