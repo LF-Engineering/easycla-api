@@ -97,11 +97,11 @@ paths:
     get:
       security: []
       summary: list foundations affiliated with the organization
-      description: Returns List of foundations affiliated with the organization of organization manager
+      description: Returns list of foundations affiliated with the organization of organization manager
       operationId: getOrgFoundations
       parameters:
         - name: salesForceOrganizationId
-          description: SaleForce ID of organization
+          description: SalesForce ID of organization
           in: path
           type: string
           required: true
