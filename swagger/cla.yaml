@@ -229,9 +229,8 @@ definitions:
         items:
           type: object
           additionalProperties:
-            type: array
-            items:
-              $ref: '#/definitions/clagroup'
+            type: object
+            $ref: '#/definitions/clagroup'
 
   clagroup:
     type: object
