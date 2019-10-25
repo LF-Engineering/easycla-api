@@ -9,6 +9,7 @@ import (
 	"runtime"
 
 	"github.com/communitybridge/easycla-api/config"
+	"github.com/communitybridge/easycla-api/orgs"
 
 	"github.com/communitybridge/easycla-api/apidocs"
 	"github.com/communitybridge/easycla-api/gen/restapi"
@@ -102,6 +103,10 @@ func server(localMode bool) http.Handler {
 
 	health.Configure(api, healthService)
 	apidocs.Configure(api)
+
+	orgsRepo := orgs.NewRepository()
+	orgsService := orgs.NewService(orgsRepo)
+	orgs.Configure(api, orgsService)
 
 	return api.Serve(setupMiddlewares)
 }
