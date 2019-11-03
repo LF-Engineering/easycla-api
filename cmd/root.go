@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 
+	ini "github.com/communitybridge/easycla-api/init"
 	log "github.com/communitybridge/easycla-api/logging"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -21,19 +22,19 @@ var (
 func init() {
 	log.Info("Running init...")
 
-	// cobra.OnInitialize(initConfig)
 	viper.AutomaticEnv()
+	//viper.SetEnvPrefix(ini.ServiceName)
 	defaults := map[string]interface{}{
 		"PORT":               8080,
 		"APP_ENV":            "local",
 		"USE_MOCK":           "False",
-		"DB_MAX_CONNECTIONS": 1,
+		"DB_MAX_CONNECTIONS": 20,
 		"STAGE":              "dev",
 
 		// should we validate the user's GitHub organizations?
-		"GH_ORG_VALIDATION": "true",
+		//"GH_ORG_VALIDATION": "true",
 		// should we validate company API queries against the current authenticated user?
-		"COMPANY_USER_VALIDATION": "true",
+		//"COMPANY_USER_VALIDATION": "true",
 	}
 
 	for key, value := range defaults {
@@ -52,14 +53,14 @@ func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	// Initialize our common stuff
-	//ini.Init()
+	ini.Init()
 }
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "cla-backend-go",
-	Short: "CLA Backend v3",
-	Long:  "CLA Backend supporting the /v3 endpoints",
+	Use:   "easycla-api",
+	Short: "EasyCAL API v4",
+	Long:  "EasyCLA Backend supporting the /v4 endpoints",
 	Run:   runServer,
 }
 

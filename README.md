@@ -112,9 +112,14 @@ View the Health endpoint:
 
 ```bash
 open http://localhost:8080/v4/ops/health
+# via API Gateway
+open https://api-gw.dev.platform.linuxfoundation.org/cla-service/v4/ops/health
+
 
 # or use cURL
 curl -s -XGET http://localhost:8080/v4/ops/health
+# via API Gateway
+curl -s -XGET https://api-gw.dev.platform.linuxfoundation.org/cla-service/v4/ops/health
 
 # or use cURL with jq to make the output pretty
 curl -s -XGET http://localhost:8080/v4/ops/health | jq

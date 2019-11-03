@@ -13,6 +13,7 @@ import (
 
 // Service provides an API to the health API
 type Service struct {
+	repo      RepositoryService
 	version   string
 	commit    string
 	branch    string
@@ -20,8 +21,9 @@ type Service struct {
 }
 
 // New is a simple helper function to create a health service instance
-func New(version, commit, branch, buildDate string) Service {
+func New(repo RepositoryService, version, commit, branch, buildDate string) Service {
 	return Service{
+		repo:      repo,
 		version:   version,
 		commit:    commit,
 		branch:    branch,
@@ -52,7 +54,8 @@ func (s Service) HealthCheck(ctx context.Context, in health.GetHealthParams) (*m
 
 	// Do a quick check to see if we have a RDS database connection
 	rdsNow := time.Now()
-	rdsAlive := isRDSAlive()
+	rdsAlive := s.repo.IsAlive()
+	//rdsAlive := true
 	rds := models.HealthStatus{
 		TimeStamp: time.Now().UTC().Format(time.RFC3339),
 		Healthy:   rdsAlive,
@@ -105,9 +108,4 @@ func isDynamoDBAlive() bool {
 		// No error is success
 		return err == nil
 	*/
-}
-
-// isRDSAlive runs a check to see if we have connectivity to the database - returns true if successful, false otherwise
-func isRDSAlive() bool {
-	return true
 }

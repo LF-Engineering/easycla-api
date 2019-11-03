@@ -80,9 +80,10 @@ func server(localMode bool) http.Handler {
 	log.Infof("Golang Arch             : %s", runtime.GOARCH)
 	log.Infof("LOCAL_MODE              : %t", localMode)
 	log.Infof("STAGE                   : %s", stage)
+	log.Infof("AWS_REGION              : %s", os.Getenv("AWS_REGION"))
 	log.Infof("Service Host            : %s", host)
-	log.Infof("Service Port            : %d", *portFlag)
-	log.Infof("Sender email address is : %s", configFile.SenderEmailAddress)
+	log.Infof("Service Port (localonly): %d", *portFlag)
+	log.Infof("RDS Host                : %s", configFile.RDSHost)
 	log.Infof("RDS Database            : %s", configFile.RDSDatabase)
 	log.Infof("RDS Username            : %s", configFile.RDSUsername)
 
@@ -93,24 +94,14 @@ func server(localMode bool) http.Handler {
 
 	api := operations.NewClaAPI(swaggerSpec)
 
-	healthService := health.New(Version, Commit, Branch, BuildDate)
+	// Initialize the DB connection
+	db := initDB(configFile)
+
+	healthRepo := health.NewRepository(db)
+	healthService := health.New(healthRepo, Version, Commit, Branch, BuildDate)
 
 	health.Configure(api, healthService)
 	apidocs.Configure(api)
-
-	/*
-		// For local mode - we allow anything, otherwise we use the value specified in the config (e.g. AWS SSM)
-		var apiHandler http.Handler
-		if localMode {
-			apiHandler = setupCORSHandlerLocal(api.Serve(setupMiddlewares))
-			// For auto session save/load, use:
-			//apiHandler = setupSessionHandler(
-			//	setupCORSHandlerLocal(
-			//		api.Serve(setupMiddlewares)), sessionStore)
-		} else {
-			apiHandler = setupCORSHandler(api.Serve(setupMiddlewares), configFile.AllowedOrigins)
-		}
-	*/
 
 	return api.Serve(setupMiddlewares)
 }
@@ -119,20 +110,6 @@ func server(localMode bool) http.Handler {
 // The middleware executes after routing but before authentication, binding and validation
 func setupMiddlewares(handler http.Handler) http.Handler {
 	return responseLoggingMiddleware(handler)
-}
-
-// stringInSlice returns true if the specified string exists in the slice, otherwise returns false
-func stringInSlice(a string, list []string) bool {
-	if list == nil {
-		return false
-	}
-
-	for _, b := range list {
-		if b == a {
-			return true
-		}
-	}
-	return false
 }
 
 // LoggingResponseWriter is a wrapper around an http.ResponseWriter which captures the

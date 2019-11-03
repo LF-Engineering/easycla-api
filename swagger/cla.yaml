@@ -103,26 +103,32 @@ definitions:
         description: The overall timestamp of the health check
         example: "2019-10-15T16:06:15Z"
         type: string
+        x-omitempty: false
       Status:
         description: The overall status of the health check
         example: "healthy"
         type: string
+        x-omitempty: false
       Version:
         description: The version tag of the service related to this health check
         example: "v0.1.35"
         type: string
+        x-omitempty: false
       Githash:
         description: The git hash of the service related to this health check
         example: "e96f055"
         type: string
+        x-omitempty: false
       Branch:
         description: The git branch of the service related to this health check
         example: "master"
         type: string
+        x-omitempty: false
       BuildTimeStamp:
         description: The build timestamp of the service related to this health check
         example: "2019-10-15T09:05:34-0700"
         type: string
+        x-omitempty: false
       Healths:
         description: An array of components or sub-components for this health check
         type: array
@@ -131,19 +137,23 @@ definitions:
 
   health-status:
     type: object
+    title: Health Status
     properties:
       Name:
         description: The name of the component or sub-component related to this health check.
         example: "CLA - DynamoDB"
         type: string
+        x-omitempty: false
       Duration:
         description: The time it took to gather the health status
         example: "8.481802ms"
         type: string
+        x-omitempty: false
       Healthy:
         description: A flag indicating if this health status is health or not
         example: true
         type: boolean
+        x-omitempty: false
       Error:
         description: An optional error message indicating the reason for the failed health check.
         example: "unable to connect to database - permission denied"
@@ -152,7 +162,7 @@ definitions:
         example: "2019-10-15T16:07:43Z"
         description: The timestamp of the health check
         type: string
-    title: Health Status
+        x-omitempty: false
 
   error-response:
     type: object
