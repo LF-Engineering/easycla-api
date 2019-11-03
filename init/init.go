@@ -4,15 +4,17 @@
 package init
 
 import (
-	"fmt"
+	"os"
 
 	log "github.com/communitybridge/easycla-api/logging"
-	"github.com/spf13/viper"
 )
 
 const (
 	// ServiceName is the name of the service - this is used in logs and as a environment prefix
-	ServiceName = "CLA_API_SERVICE"
+	ServiceName = "CLA_SERVICE"
+
+	// DefaultStage is the default run-time environment, typically one of: dev, test, staging or prod
+	DefaultStage = "dev"
 )
 
 var (
@@ -21,9 +23,16 @@ var (
 
 // CommonInit initializes the common properties
 func CommonInit() {
-	stage = getProperty("STAGE")
+	stage = os.Getenv("STAGE")
+	if stage == "" {
+		log.Debugf("STAGE environment variable is not set. Using default: %s", DefaultStage)
+		stage = DefaultStage
+	} else {
+		log.Debugf("STAGE set to: %s", DefaultStage)
+	}
 }
 
+/*
 // getProperty is a common routine to bind and return the specified environment variable
 func getProperty(property string) string {
 	err := viper.BindEnv(property)
@@ -39,6 +48,7 @@ func getProperty(property string) string {
 
 	return value
 }
+*/
 
 // Init initialization logic for all the handlers
 func Init() {

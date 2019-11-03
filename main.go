@@ -5,6 +5,7 @@ package main
 
 import (
 	"github.com/communitybridge/easycla-api/cmd"
+	_ "github.com/lib/pq"
 )
 
 var (

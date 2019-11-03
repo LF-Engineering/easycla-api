@@ -45,6 +45,7 @@ type Config struct {
 	CorporateConsoleURL string `json:"corporateConsoleURL"`
 
 	// RDS
+	RDSHost     string `json:"rdsHost"`
 	RDSDatabase string `json:"rdsDatabase"`
 	RDSUsername string `json:"rdsUsername"`
 	RDSPassword string `json:"rdsPassword"`
@@ -89,12 +90,12 @@ func LoadConfig(configFilePath string, awsSession *session.Session, awsStage str
 		// Read from SSM
 		log.Info("Loading SSM config...")
 		config, err = loadSSMConfig(awsSession, awsStage)
-
 	} else {
 		return Config{}, errors.New("config not found")
 	}
 
 	if err != nil {
+		log.Warnf("Error fetching SSM parameters for configuration, error: %+v", err)
 		return Config{}, err
 	}
 
