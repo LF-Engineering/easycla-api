@@ -20,5 +20,5 @@ func NewService(repo Repository) Service {
 }
 
 func (s *service) GetOrgFoundations(ctx context.Context, in *organization.GetOrgFoundationsParams) (models.Organization, error) {
-	return s.repo.GetOrgFoundations(ctx, in)
+	return s.repo.GetOrgFoundations(ctx, in.SalesForceOrganizationID)
 }
