@@ -93,6 +93,38 @@ paths:
       tags:
         - docs
 
+  /orgs/{salesForceOrganizationId}:
+    get:
+      security: []
+      summary: list foundations affiliated with the organization
+      description: Returns list of foundations affiliated with the organization of organization manager
+      operationId: getOrgFoundations
+      parameters:
+        - name: salesForceOrganizationId
+          description: SalesForce ID of organization
+          in: path
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/organization'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+      tags:
+        - organization
+
+
+
 
 definitions:
   health:
@@ -179,6 +211,47 @@ definitions:
         description: The message for the error response
         example: "Not authorized"
         pattern: '^([\w\d\s\-\,\./]+){2,}$'
+
+  organization:
+    type: object
+    additionalProperties:
+      type: array
+      items:
+        $ref: '#/definitions/foundation'
+
+  foundation:
+    type: object
+    properties:
+      foundationId:
+        type: string
+      claGroups:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+            $ref: '#/definitions/clagroup'
+
+  clagroup:
+    type: object
+    title: cla group
+    description: cla group details
+    properties:
+      claGroupId:
+        type: string
+      organizationSigned:
+        type: boolean
+      waitingForSignature:
+        type: boolean
+      employeesSigned:
+        type: integer
+      employeesPending:
+        type: integer
+      projectsCovered:
+        type: array
+        items:
+          type: string
+
 
 responses:
   unauthorized:
