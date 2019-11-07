@@ -123,7 +123,35 @@ paths:
       tags:
         - organization
 
-
+  /project/{projectID}:
+    get:
+      security: []
+      summary: Get project
+      description: Returns details of the project
+      operationId: getProject
+      parameters:
+        - name: projectID
+          description: ID of the project
+          in: path
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/project'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+      tags:
+        - project
 
 
 definitions:
@@ -252,6 +280,112 @@ definitions:
         items:
           type: string
 
+  project:
+    type: object
+    properties:
+      projectID:
+        type: string
+      projectName:
+        type: string
+      templates:
+        type: array
+        items:
+          $ref: '#/definitions/claTemplate'
+      cclaEnabled:
+        type: boolean
+      iclaEnabled:
+        type: boolean
+      iclaSignatureRequired:
+        type: boolean
+      cclaCompaniesSigned:
+        type: array
+        items:
+          type: string
+      whitelist:
+        $ref: '#/definitions/whitelist'
+
+  claTemplate:
+    type: object
+    properties:
+      type:
+        type: string
+      legalEntityName:
+        type: string
+      author:
+        type: string
+      url:
+        type: string
+      version:
+        type: string
+      created:
+        type: string
+      updated:
+        type: string
+
+  whitelist:
+    type: object
+    properties:
+      users:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/whitelistedUser'
+      domains:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/whitelistedDomain'
+      emails:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/whitelistedEmail'
+      githubUsers:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/whitelistedGithubUser'
+      githubOrgs:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/whitelistedGithubOrgs'
+
+  whitelistedUser:
+    type: object
+    properties:
+      userID:
+        type: string
+      signed:
+        type: boolean
+      signed_on:
+        type: string
+      last_activity:
+        type: string
+
+  whitelistedDomain:
+    type: object
+    properties:
+      domain:
+        type: string
+
+  whitelistedEmail:
+    type: object
+    properties:
+      email:
+        type: string
+
+  whitelistedGithubUser:
+    type: object
+    properties:
+      githubUser:
+        type: string
+
+  whitelistedGithubOrgs:
+    type: object
+    properties:
+      githubOrg:
+        type: string
 
 responses:
   unauthorized:
