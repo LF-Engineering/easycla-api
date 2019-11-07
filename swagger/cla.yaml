@@ -123,7 +123,7 @@ paths:
       tags:
         - organization
 
-  /project/{projectID}:
+  /projects/{projectID}:
     get:
       security: []
       summary: Get project
