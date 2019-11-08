@@ -10,6 +10,7 @@ import (
 
 	"github.com/communitybridge/easycla-api/config"
 	"github.com/communitybridge/easycla-api/orgs"
+	"github.com/communitybridge/easycla-api/projects"
 
 	"github.com/communitybridge/easycla-api/apidocs"
 	"github.com/communitybridge/easycla-api/gen/restapi"
@@ -107,6 +108,10 @@ func server(localMode bool) http.Handler {
 	orgsRepo := orgs.NewRepository()
 	orgsService := orgs.NewService(orgsRepo)
 	orgs.Configure(api, orgsService)
+
+	projectsRepo := projects.NewRepository()
+	projectsService := projects.NewService(projectsRepo)
+	projects.Configure(api, projectsService)
 
 	return api.Serve(setupMiddlewares)
 }
