@@ -283,33 +283,33 @@ definitions:
   project:
     type: object
     properties:
-      projectID:
+      project_id:
         type: string
-      projectName:
+      project_name:
         type: string
       templates:
         type: array
         items:
-          $ref: '#/definitions/claTemplate'
-      cclaEnabled:
+          $ref: '#/definitions/cla_template'
+      ccla_enabled:
         type: boolean
-      iclaEnabled:
+      icla_enabled:
         type: boolean
-      iclaSignatureRequired:
+      icla_signature_required:
         type: boolean
-      cclaCompaniesSigned:
+      ccla_companies_signed:
         type: array
         items:
           type: string
       whitelist:
         $ref: '#/definitions/whitelist'
 
-  claTemplate:
+  cla_template:
     type: object
     properties:
       type:
         type: string
-      legalEntityName:
+      legal_entity_name:
         type: string
       author:
         type: string
@@ -329,32 +329,32 @@ definitions:
         type: array
         items:
           type: object
-          $ref: '#/definitions/whitelistedUser'
+          $ref: '#/definitions/whitelisted_user'
       domains:
         type: array
         items:
           type: object
-          $ref: '#/definitions/whitelistedDomain'
+          $ref: '#/definitions/whitelisted_domain'
       emails:
         type: array
         items:
           type: object
-          $ref: '#/definitions/whitelistedEmail'
-      githubUsers:
+          $ref: '#/definitions/whitelisted_email'
+      github_users:
         type: array
         items:
           type: object
-          $ref: '#/definitions/whitelistedGithubUser'
-      githubOrgs:
+          $ref: '#/definitions/whitelisted_github_user'
+      github_orgs:
         type: array
         items:
           type: object
-          $ref: '#/definitions/whitelistedGithubOrgs'
+          $ref: '#/definitions/whitelisted_github_orgs'
 
-  whitelistedUser:
+  whitelisted_user:
     type: object
     properties:
-      userID:
+      user_id:
         type: string
       signed:
         type: boolean
@@ -363,28 +363,28 @@ definitions:
       last_activity:
         type: string
 
-  whitelistedDomain:
+  whitelisted_domain:
     type: object
     properties:
       domain:
         type: string
 
-  whitelistedEmail:
+  whitelisted_email:
     type: object
     properties:
       email:
         type: string
 
-  whitelistedGithubUser:
+  whitelisted_github_user:
     type: object
     properties:
-      githubUser:
+      github_user:
         type: string
 
-  whitelistedGithubOrgs:
+  whitelisted_github_orgs:
     type: object
     properties:
-      githubOrg:
+      github_org:
         type: string
 
 responses:
