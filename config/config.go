@@ -45,10 +45,11 @@ type Config struct {
 	CorporateConsoleURL string `json:"corporateConsoleURL"`
 
 	// RDS
-	RDSHost     string `json:"rdsHost"`
-	RDSDatabase string `json:"rdsDatabase"`
-	RDSUsername string `json:"rdsUsername"`
-	RDSPassword string `json:"rdsPassword"`
+	RDSHost     string `json:"rds_host"`
+	RDSPort     int    `json:"rds_port"`
+	RDSDatabase string `json:"rds_database"`
+	RDSUsername string `json:"rds_username"`
+	RDSPassword string `json:"rds_password"`
 }
 
 // Auth0 model

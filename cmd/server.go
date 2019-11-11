@@ -86,6 +86,7 @@ func server(localMode bool) http.Handler {
 	log.Infof("Service Host            : %s", host)
 	log.Infof("Service Port (localonly): %d", *portFlag)
 	log.Infof("RDS Host                : %s", configFile.RDSHost)
+	log.Infof("RDS Port                : %d", configFile.RDSPort)
 	log.Infof("RDS Database            : %s", configFile.RDSDatabase)
 	log.Infof("RDS Username            : %s", configFile.RDSUsername)
 
