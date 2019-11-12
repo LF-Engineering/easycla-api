@@ -38,7 +38,7 @@ swagger-validate:
 	swagger validate swagger/cla.yaml
 
 up:
-	dbmate up
+	dbmate -d ".build/db/migrations" -s ".build/db/schema.sql" up
 
 fmt:
 	@gofmt -w -l -s $(GO_FILES)
