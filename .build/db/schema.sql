@@ -35,7 +35,7 @@ CREATE TABLE public.audit_log (
     id uuid NOT NULL,
     event character varying(255) NOT NULL,
     username character varying(255) NOT NULL,
-    event_time timestamp with time zone DEFAULT now() NOT NULL,
+    event_time bigint DEFAULT date_part('epoch'::text, now()) NOT NULL,
     event_data json
 );
 
