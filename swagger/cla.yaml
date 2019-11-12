@@ -154,6 +154,82 @@ paths:
         - project
 
 
+  /audit_events/{eventID}:
+    get:
+      security: []
+      summary: Get audit event details
+      description: Returns details of the event
+      operationId: getAuditEvent
+      parameters:
+        - name: eventID
+          description: ID of the audit event
+          in: path
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/audit_event'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+      tags:
+        - audit_events
+
+  /audit_events:
+    get:
+      security: []
+      summary: Get list of audit events
+      description: Returns list of audit events
+      operationId: listAuditEvents
+      parameters:
+        - name: offset
+          description: The number of events to skip before starting to collect the result set
+          in: query
+          type: integer
+        - name: limit
+          description: The maximum number of events to return
+          in: query
+          type: integer
+        - name: before
+          description: Events occured before this timestamp (epoch format)
+          in: query
+          type: integer
+        - name: after
+          description: Events occured after this timestamp (epoch format)
+          in: query
+          type: integer
+        - name: event_type
+          description: Type of the event
+          in: query
+          type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            $ref: '#/definitions/audit_event_list'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+      tags:
+        - audit_events
+
 definitions:
   health:
     type: object
@@ -385,6 +461,39 @@ definitions:
     type: object
     properties:
       github_org:
+        type: string
+
+  audit_event_input:
+    type: object
+    properties:
+      event_type:
+        type: string
+      username:
+        type: string
+      event_data:
+        type: string
+
+  audit_event_list:
+    type: object
+    properties:
+      events:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/audit_event'
+
+  audit_event:
+    type: object
+    properties:
+      id:
+        type: string
+      event_type:
+        type: string
+      username:
+        type: string
+      event_time:
+        type: integer
+      event_data:
         type: string
 
 responses:
