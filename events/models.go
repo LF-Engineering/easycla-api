@@ -8,13 +8,13 @@ import (
 
 // SQLEvent struct represent row of sql.events table
 type SQLEvent struct {
-	ID        sql.NullString `json:"id,omitempty"`
-	EventType sql.NullString `json:"event_type,omitempty"`
-	UserID    sql.NullString `json:"user_id,omitempty"`
-	ProjectID sql.NullString `json:"project_id,omitempty"`
-	CompanyID sql.NullString `json:"company_id,omitempty"`
-	EventTime sql.NullInt64  `json:"event_time,omitempty"`
-	EventData sql.NullString `json:"event_data,omitempty"`
+	ID        sql.NullString `db:"id"`
+	EventType sql.NullString `db:"event_type"`
+	UserID    sql.NullString `db:"user_id"`
+	ProjectID sql.NullString `db:"project_id"`
+	CompanyID sql.NullString `db:"company_id"`
+	EventTime sql.NullInt64  `db:"event_time"`
+	EventData sql.NullString `db:"event_data"`
 }
 
 func (e *SQLEvent) toEvent() *models.Event {
