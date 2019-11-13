@@ -10,6 +10,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: cla; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA cla;
+
+
+--
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -23,16 +30,30 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: events; Type: TABLE; Schema: public; Owner: -
+-- Name: events; Type: TABLE; Schema: cla; Owner: -
 --
 
-CREATE TABLE public.events (
-    id uuid NOT NULL,
+CREATE TABLE cla.events (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     event_type character varying(255) NOT NULL,
     user_id character varying(255) NOT NULL,
     project_id character varying(255) DEFAULT NULL::character varying,
@@ -52,10 +73,10 @@ CREATE TABLE public.schema_migrations (
 
 
 --
--- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: events events_pkey; Type: CONSTRAINT; Schema: cla; Owner: -
 --
 
-ALTER TABLE ONLY public.events
+ALTER TABLE ONLY cla.events
     ADD CONSTRAINT events_pkey PRIMARY KEY (id);
 
 
