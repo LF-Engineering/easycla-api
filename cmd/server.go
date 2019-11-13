@@ -9,6 +9,7 @@ import (
 	"runtime"
 
 	"github.com/communitybridge/easycla-api/config"
+	"github.com/communitybridge/easycla-api/events"
 	"github.com/communitybridge/easycla-api/orgs"
 	"github.com/communitybridge/easycla-api/projects"
 
@@ -112,6 +113,10 @@ func server(localMode bool) http.Handler {
 	projectsRepo := projects.NewRepository()
 	projectsService := projects.NewService(projectsRepo)
 	projects.Configure(api, projectsService)
+
+	eventsRepo := events.NewRepository(db)
+	eventsService := events.NewService(eventsRepo)
+	events.Configure(api, eventsService)
 
 	return api.Serve(setupMiddlewares)
 }
