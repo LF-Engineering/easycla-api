@@ -163,6 +163,7 @@ paths:
         - $ref: '#/parameters/page_size'
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/order_by'
+        - $ref: '#/parameters/sort_order'
         - $ref: '#/parameters/event_type'
         - $ref: '#/parameters/user_id'
         - $ref: '#/parameters/company_id'
@@ -496,6 +497,12 @@ parameters:
     in: query
     type: string
     pattern: '^([\w\d\-]+){2,}$'
+  sort_order:
+    name: sort_order
+    in: query
+    description: Sort order
+    type: string
+    enum: [asc, desc]
   event_type:
     name: event_type
     description: Type of the event
