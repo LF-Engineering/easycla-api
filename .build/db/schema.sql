@@ -28,15 +28,17 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: audit_events; Type: TABLE; Schema: public; Owner: -
+-- Name: events; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.audit_events (
+CREATE TABLE public.events (
     id uuid NOT NULL,
     event_type character varying(255) NOT NULL,
-    username character varying(255) NOT NULL,
+    user_id character varying(255) NOT NULL,
+    project_id character varying(255) DEFAULT NULL::character varying,
+    company_id character varying(255) DEFAULT NULL::character varying,
     event_time bigint DEFAULT date_part('epoch'::text, now()) NOT NULL,
-    event_data json
+    event_data jsonb
 );
 
 
@@ -50,11 +52,11 @@ CREATE TABLE public.schema_migrations (
 
 
 --
--- Name: audit_events audit_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.audit_events
-    ADD CONSTRAINT audit_events_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT events_pkey PRIMARY KEY (id);
 
 
 --
