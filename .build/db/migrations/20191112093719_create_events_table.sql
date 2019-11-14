@@ -14,5 +14,5 @@ create table cla.events (
 );
 
 -- migrate:down
-drop table events;
+drop table cla.events;
 drop schema cla;
