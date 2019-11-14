@@ -24,7 +24,7 @@ var (
 // Repository interface defines methods of event repository service
 type Repository interface {
 	CreateEvent(event *models.Event) error
-	ListEvents(ctx context.Context, params *events.ListEventsParams) (*models.EventList, error)
+	SearchEvents(ctx context.Context, params *events.SearchEventsParams) (*models.EventList, error)
 }
 
 type repository struct {
@@ -71,7 +71,7 @@ func (r *repository) CreateEvent(event *models.Event) error {
 	return err
 }
 
-func listEventsSQLStatement(db *sqlx.DB, params *events.ListEventsParams) *sqlz.SelectStmt {
+func searchEventsSQLStatement(db *sqlx.DB, params *events.SearchEventsParams) *sqlz.SelectStmt {
 	stmt := sqlz.Newx(db).
 		Select("*").
 		From(EventsTable)
@@ -116,9 +116,9 @@ func listEventsSQLStatement(db *sqlx.DB, params *events.ListEventsParams) *sqlz.
 	return stmt
 }
 
-func (r *repository) ListEvents(ctx context.Context, params *events.ListEventsParams) (*models.EventList, error) {
+func (r *repository) SearchEvents(ctx context.Context, params *events.SearchEventsParams) (*models.EventList, error) {
 	var events []SQLEvent
-	stmt := listEventsSQLStatement(r.GetDB(), params)
+	stmt := searchEventsSQLStatement(r.GetDB(), params)
 	err := stmt.GetAll(&events)
 	if err != nil {
 		return nil, err

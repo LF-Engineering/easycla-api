@@ -10,7 +10,7 @@ import (
 // Service interface defines methods of event service
 type Service interface {
 	CreateEvent(event models.Event) error
-	ListEvents(ctx context.Context, params *events.ListEventsParams) (*models.EventList, error)
+	SearchEvents(ctx context.Context, params *events.SearchEventsParams) (*models.EventList, error)
 }
 
 type service struct {
@@ -26,6 +26,6 @@ func (s *service) CreateEvent(event models.Event) error {
 	return s.repo.CreateEvent(&event)
 }
 
-func (s *service) ListEvents(ctx context.Context, params *events.ListEventsParams) (*models.EventList, error) {
-	return s.repo.ListEvents(ctx, params)
+func (s *service) SearchEvents(ctx context.Context, params *events.SearchEventsParams) (*models.EventList, error) {
+	return s.repo.SearchEvents(ctx, params)
 }

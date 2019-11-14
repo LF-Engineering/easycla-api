@@ -156,9 +156,9 @@ paths:
   /events:
     get:
       security: []
-      summary: Get list of events
-      description: Returns list of events
-      operationId: listEvents
+      summary: search events
+      description: Returns list of events matching with search criteria
+      operationId: searchEvents
       parameters:
         - $ref: '#/parameters/page_size'
         - $ref: '#/parameters/offset'

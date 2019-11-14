@@ -9,13 +9,13 @@ import (
 
 // Configure setups handlers on api with service
 func Configure(api *operations.ClaAPI, service Service) {
-	api.EventsListEventsHandler = events.ListEventsHandlerFunc(
-		func(params events.ListEventsParams) middleware.Responder {
-			result, err := service.ListEvents(params.HTTPRequest.Context(), &params)
+	api.EventsSearchEventsHandler = events.SearchEventsHandlerFunc(
+		func(params events.SearchEventsParams) middleware.Responder {
+			result, err := service.SearchEvents(params.HTTPRequest.Context(), &params)
 			if err != nil {
-				return events.NewListEventsBadRequest().WithPayload(errorResponse(err))
+				return events.NewSearchEventsBadRequest().WithPayload(errorResponse(err))
 			}
-			return events.NewListEventsOK().WithPayload(result)
+			return events.NewSearchEventsOK().WithPayload(result)
 		})
 }
 
