@@ -496,7 +496,7 @@ parameters:
     description: The field to order by, default sort order is ascending
     in: query
     type: string
-    pattern: '^([\w\d\-]+){2,}$'
+    enum: [event_time,project_id,company_id,user_id,event_type]
   sort_order:
     name: sort_order
     in: query
