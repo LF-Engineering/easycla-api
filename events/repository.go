@@ -46,6 +46,8 @@ func validEventType(eventType string) bool {
 	return eventType != ""
 }
 
+// Create event will create event in database.
+// ID passed in input will get ignore.
 func (r *repository) CreateEvent(event *models.Event) error {
 	values := make(map[string]interface{})
 	if !validEventType(event.EventType) {
@@ -96,7 +98,7 @@ func searchEventsSQLStatement(db *sqlx.DB, params *events.SearchEventsParams) *s
 		conditions = append(conditions, sqlz.Gte("event_time", *params.After))
 	}
 	if len(conditions) != 0 {
-		stmt.Where(conditions...)
+		stmt = stmt.Where(conditions...)
 	}
 	if params.Offset != nil {
 		stmt = stmt.Offset(*params.Offset)
@@ -116,6 +118,7 @@ func searchEventsSQLStatement(db *sqlx.DB, params *events.SearchEventsParams) *s
 	return stmt
 }
 
+// SearchEvents returns list of events matching with filter criteria.
 func (r *repository) SearchEvents(ctx context.Context, params *events.SearchEventsParams) (*models.EventList, error) {
 	var events []SQLEvent
 	stmt := searchEventsSQLStatement(r.GetDB(), params)
