@@ -89,6 +89,7 @@ func server(localMode bool) http.Handler {
 	log.Infof("RDS Host                : %s", configFile.RDSHost)
 	log.Infof("RDS Database            : %s", configFile.RDSDatabase)
 	log.Infof("RDS Username            : %s", configFile.RDSUsername)
+	log.Infof("RDS Port            	   : %d", configFile.RDSPort)
 
 	swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
 	if err != nil {
@@ -117,7 +118,6 @@ func server(localMode bool) http.Handler {
 	eventsRepo := events.NewRepository(db)
 	eventsService := events.NewService(eventsRepo)
 	events.Configure(api, eventsService)
-
 	return api.Serve(setupMiddlewares)
 }
 
