@@ -49,6 +49,7 @@ type Config struct {
 	RDSDatabase string `json:"rdsDatabase"`
 	RDSUsername string `json:"rdsUsername"`
 	RDSPassword string `json:"rdsPassword"`
+	RDSPort     int    `json:"rdsPort"`
 }
 
 // Auth0 model

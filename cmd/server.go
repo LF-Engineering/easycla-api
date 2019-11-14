@@ -9,6 +9,7 @@ import (
 	"runtime"
 
 	"github.com/communitybridge/easycla-api/config"
+	"github.com/communitybridge/easycla-api/events"
 	"github.com/communitybridge/easycla-api/orgs"
 	"github.com/communitybridge/easycla-api/projects"
 
@@ -88,6 +89,7 @@ func server(localMode bool) http.Handler {
 	log.Infof("RDS Host                : %s", configFile.RDSHost)
 	log.Infof("RDS Database            : %s", configFile.RDSDatabase)
 	log.Infof("RDS Username            : %s", configFile.RDSUsername)
+	log.Infof("RDS Port            	   : %d", configFile.RDSPort)
 
 	swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
 	if err != nil {
@@ -113,6 +115,9 @@ func server(localMode bool) http.Handler {
 	projectsService := projects.NewService(projectsRepo)
 	projects.Configure(api, projectsService)
 
+	eventsRepo := events.NewRepository(db)
+	eventsService := events.NewService(eventsRepo)
+	events.Configure(api, eventsService)
 	return api.Serve(setupMiddlewares)
 }
 

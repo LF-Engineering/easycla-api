@@ -29,7 +29,7 @@ func initDB(config config.Config) *sqlx.DB {
 
 	if true {
 		dbInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=verify-full connect_timeout=5",
-			config.RDSHost, 3306, config.RDSUsername, config.RDSPassword, config.RDSDatabase)
+			config.RDSHost, config.RDSPort, config.RDSUsername, config.RDSPassword, config.RDSDatabase)
 		log.Infof("Initializing DB connection to database: %s", dbInfo)
 		var err error
 		d, err = sqlx.Open("postgres", dbInfo)

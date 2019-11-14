@@ -153,6 +153,41 @@ paths:
       tags:
         - project
 
+  /events:
+    get:
+      security: []
+      summary: search events
+      description: Returns list of events matching with search criteria
+      operationId: searchEvents
+      parameters:
+        - $ref: '#/parameters/page_size'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/order_by'
+        - $ref: '#/parameters/sort_order'
+        - $ref: '#/parameters/event_type'
+        - $ref: '#/parameters/user_id'
+        - $ref: '#/parameters/company_id'
+        - $ref: '#/parameters/project_id'
+        - $ref: '#/parameters/before'
+        - $ref: '#/parameters/after'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            $ref: '#/definitions/event_list'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+      tags:
+        - events
 
 definitions:
   health:
@@ -387,6 +422,40 @@ definitions:
       github_org:
         type: string
 
+  event_list:
+    type: object
+    properties:
+      events:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/event'
+
+  event:
+    type: object
+    properties:
+      id:
+        type: string
+        description: unique id of the event
+      event_type:
+        type: string
+        description: type of the event
+      user_id:
+        type: string
+        description: id of the user who created this event
+      project_id:
+        type: string
+        description: id of the SFID project
+      company_id:
+        type: string
+        description: id od the organization/company
+      event_time:
+        type: integer
+        description: time of the event in epoch format. 
+      event_data:
+        type: string
+        description: data related to the event
+
 responses:
   unauthorized:
     description: Unauthorized
@@ -409,3 +478,58 @@ responses:
   #  schema:
   #    $ref: '#/definitions/error-response'
 
+parameters:
+  page_size:
+    name: page_size
+    description: The maximum number of results per page, value must be a positive integer value
+    in: query
+    type: integer
+    default: 100
+  offset:
+    name: offset
+    description: The page offset for fetching subsequent pages of results, value must be a non-negative integer value
+    in: query
+    type: integer
+    default: 0
+  order_by:
+    name: order_by
+    description: The field to order by, default sort order is ascending
+    in: query
+    type: string
+    enum: [event_time,project_id,company_id,user_id,event_type]
+  sort_order:
+    name: sort_order
+    in: query
+    description: Sort order
+    type: string
+    enum: [asc, desc]
+  event_type:
+    name: event_type
+    description: Type of the event
+    in: query
+    type: string
+  user_id:
+    name: user_id
+    description: unique id of the user
+    in: query
+    type: string
+  project_id:
+    name: project_id
+    description: unique id of the project
+    in: query
+    type: string
+  company_id:
+    name: company_id
+    description: unique id of the company
+    in: query
+    type: string
+  before:
+    name: before
+    description: return result created before this time. Time must be in epoch format in seconds.
+    in: query
+    type: integer
+  after:
+    name: after
+    description: return result created after this time. Time must be in epoch format in seconds.
+    in: query
+    type: integer
