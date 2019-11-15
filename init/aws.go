@@ -25,6 +25,7 @@ var (
 	awsRegion          string
 	awsAccessKeyID     string
 	awsSecretAccessKey string
+	awsSessionToken    string
 
 	awsSession           *session.Session
 	awsCloudWatchService *cloudwatch.CloudWatch
@@ -37,7 +38,7 @@ func AWSInit() {
 		log.Debugf("AWS_REGION environment variable is not set. Using default region: %s", DefaultAWSRegion)
 		awsRegion = DefaultAWSRegion
 	} else {
-		log.Debugf("AWS_REGION set to: %s", DefaultAWSRegion)
+		log.Debugf("AWS_REGION set to: %s", awsRegion)
 	}
 
 	key := fmt.Sprintf("%s_AWS_ACCESS_KEY_ID", ServiceName)
@@ -54,6 +55,12 @@ func AWSInit() {
 	}
 	log.Debugf("Loaded %s: %s...", key, awsSecretAccessKey[:5])
 
+	key = fmt.Sprintf("%s_AWS_SESSION_TOKEN", ServiceName)
+	awsSessionToken = os.Getenv(key)
+	if awsSessionToken != "" {
+		log.Debugf("Loaded %s: %s...", key, awsSessionToken[:5])
+	}
+
 	if err := startCloudWatchSession(); err != nil {
 		log.Fatalf("Error starting the AWS CloudWatch session - Error: %s", err.Error())
 	}
@@ -65,7 +72,7 @@ func GetAWSSession() (*session.Session, error) {
 		log.Debugf("Creating a new AWS session for region: %s", awsRegion)
 		awsSession = session.Must(session.NewSession(&aws.Config{
 			Region:      aws.String(awsRegion),
-			Credentials: credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, ""),
+			Credentials: credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, awsSessionToken),
 			MaxRetries:  aws.Int(5),
 		}))
 
