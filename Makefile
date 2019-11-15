@@ -13,6 +13,29 @@ GO_PKGS=$(shell go list ./... | grep -v /vendor/ | grep -v /node_modules/)
 GO_FILES=$(shell find . -type f -name '*.go' -not -path './vendor/*')
 TEST_ENV=AWS_REGION=us-east-1 CLA_SERVICE_AWS_ACCESS_KEY_ID=test-env-aws-access-key-id CLA_SERVICE_AWS_SECRET_ACCESS_KEY=test-env-aws-secret-access-key
 
+# Determine the OS
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	detected_os=linux
+endif
+ifeq ($(UNAME_S),Darwin)
+	detected_os=macos
+endif
+ifeq ($(OS),Windows_NT)
+	detected_os=windows
+endif
+
+# Determine the architecture
+UNAME_P := $(shell uname -m)
+ifeq ($(UNAME_P),x86_64)
+	detected_arch=amd64
+endif
+ifneq ($(filter %86,$(UNAME_P)),)
+	detected_arch=ia32
+endif
+ifneq ($(filter arm%,$(UNAME_P)),)
+	detected_arch=arm
+endif
 .PHONY: generate setup setup_dev setup_deploy clean swagger up fmt test run deps build build-mac build_aws_lambda qc lint
 
 generate: swagger
@@ -20,12 +43,15 @@ generate: swagger
 setup: $(LINT_TOOL) setup_dev
 	mkdir -p bin
 
-setup_dev:
+setup_dev: dbmate
 	go get -u github.com/go-swagger/go-swagger/cmd/swagger
 	go get -u golang.org/x/tools/cmd/goimports
 	go get -u github.com/golang/dep/cmd/dep	
 	go get -u github.com/stripe/safesql
-	sudo curl -fsSL -o /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/download/v1.7.0/dbmate-linux-amd64
+
+dbmate:
+	@echo "Downloading dbmate - if/when prompted, enter your sudo password"
+	sudo curl -fsSL -o /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/download/v1.7.0/dbmate-$(detected_os)-$(detected_arch)
 	sudo chmod +x /usr/local/bin/dbmate
 
 clean:

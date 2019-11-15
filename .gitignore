@@ -5,6 +5,10 @@
 *.so
 *.dylib
 
+bin/
+tools/.venv/
+tools/__pycache__/
+
 # Test binary, build with `go test -c`
 *.test
 

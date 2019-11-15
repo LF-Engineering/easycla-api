@@ -31,7 +31,7 @@ func NewRepository(db *sqlx.DB) RepositoryService {
 func (r repository) IsAlive() bool {
 	// Ask about the DB uptime
 	dbQuery := sqlz.Newx(r.db).
-		Select("SELECT count(*) as count").
+		Select("count(*) as count").
 		From("pg_stat_activity")
 
 	//Select("date_trunc('second', current_timestamp - pg_postmaster_start_time()) as uptime")

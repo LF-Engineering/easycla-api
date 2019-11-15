@@ -219,6 +219,22 @@
   version = "v1.8.0"
 
 [[projects]]
+  digest = "1:91099c6f78b1e7bdf9ed06eb4cb7f017174293a3689d76b995a06f4c8d64a7f0"
+  name = "github.com/google/go-github"
+  packages = ["github"]
+  pruneopts = "UT"
+  revision = "9686ff0746200cf521ce225525b421e13b4eac1a"
+  version = "v28.1.1"
+
+[[projects]]
+  digest = "1:a63cff6b5d8b95638bfe300385d93b2a6d9d687734b863da8e09dc834510a690"
+  name = "github.com/google/go-querystring"
+  packages = ["query"]
+  pruneopts = "UT"
+  revision = "44c6ddd0a2342c386950e880b658017258da92fc"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:582b704bebaa06b48c29b0cec224a6058a09c86883aaddabde889cd1a5f73e1b"
   name = "github.com/google/uuid"
   packages = ["."]
@@ -435,6 +451,22 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:6ce3fb507bdd13ef92dc9946fee589eefda7c647e8321d503b076e68828f8091"
+  name = "golang.org/x/crypto"
+  packages = [
+    "cast5",
+    "openpgp",
+    "openpgp/armor",
+    "openpgp/elgamal",
+    "openpgp/errors",
+    "openpgp/packet",
+    "openpgp/s2k",
+  ]
+  pruneopts = "UT"
+  revision = "e1110fd1c708ef015366ea01799a23c459593c47"
+
+[[projects]]
+  branch = "master"
   digest = "1:e654f02d20744fab9887e57ff63c7277a124122f3960a351f54bfd7edd04f536"
   name = "golang.org/x/net"
   packages = [
@@ -507,6 +539,7 @@
     "github.com/go-openapi/strfmt",
     "github.com/go-openapi/swag",
     "github.com/go-openapi/validate",
+    "github.com/google/go-github/github",
     "github.com/google/uuid",
     "github.com/ido50/sqlz",
     "github.com/jessevdk/go-flags",
