@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/communitybridge/easycla-api/config"
@@ -16,21 +17,21 @@ import (
 func initDB(config config.Config) *sqlx.DB {
 	var d *sqlx.DB
 	if false {
-		connStr := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=verify-full",
-			config.RDSUsername, config.RDSPassword, config.RDSHost, config.RDSDatabase)
+		connStr := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=verify-full",
+			config.RDSUsername, config.RDSPassword, config.RDSHost, config.RDSPort, config.RDSDatabase)
 		log.Infof("Initializing DB connection to database: %s", connStr)
 		var err error
 		d, err = sqlx.Connect("postgres", connStr)
 		if err != nil {
-			log.Panicf("unable to connect to database: %s on host: %s with user: %s. Error: %v",
-				config.RDSDatabase, config.RDSHost, config.RDSUsername, err)
+			log.Panicf("unable to connect to database: %s on host: %s:%d with user: %s. Error: %v",
+				config.RDSDatabase, config.RDSHost, config.RDSPort, config.RDSUsername, err)
 		}
 	}
 
 	if true {
-		dbInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=verify-full connect_timeout=5",
+		dbInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require connect_timeout=5",
 			config.RDSHost, config.RDSPort, config.RDSUsername, config.RDSPassword, config.RDSDatabase)
-		log.Infof("Initializing DB connection to database: %s", dbInfo)
+		log.Infof("Initializing DB connection to database: %s", stripPassword(dbInfo))
 		var err error
 		d, err = sqlx.Open("postgres", dbInfo)
 		if err != nil {
@@ -44,4 +45,9 @@ func initDB(config config.Config) *sqlx.DB {
 	d.SetConnMaxLifetime(15 * time.Minute)
 
 	return d
+}
+
+func stripPassword(dbConnection string) string {
+	re := regexp.MustCompile(`password=\w+\s+`)
+	return re.ReplaceAllString(dbConnection, "password=<redacted> ")
 }

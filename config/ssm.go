@@ -5,6 +5,7 @@ package config
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	log "github.com/communitybridge/easycla-api/logging"
@@ -125,6 +126,15 @@ func loadSSMConfig(awsSession *session.Session, stage string) (Config, error) {
 	*/
 
 	config.RDSHost, err = getSSMString(ssmClient, fmt.Sprintf("cla-rds-host-%s", stage))
+	if err != nil {
+		return Config{}, err
+	}
+
+	strPort, err := getSSMString(ssmClient, fmt.Sprintf("cla-rds-port-%s", stage))
+	if err != nil {
+		return Config{}, err
+	}
+	config.RDSPort, err = strconv.Atoi(strPort)
 	if err != nil {
 		return Config{}, err
 	}
