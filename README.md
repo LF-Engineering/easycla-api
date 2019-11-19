@@ -68,11 +68,15 @@ environment variables:
 - `AWS_ACCESS_KEY_ID` - the AWS access key ID
 - `AWS_SECRET_ACCESS_KEY` - the AWS secret access key
 
-AWS credentials are required to load the environment configuration values
-from the AWS SSM parameter store. Once these values are exported to your
-environment, then run the executable generated during the build:
+The configuration can be loaded from AWS SSM parameters or from a local
+configuration file. An example local configuration file is provided:
+`config-example.json`.
 
 ```bash
+# Load from local configuration
+./bin/cla-api --config config.json
+
+# Load from AWS SSM (default)
 ./bin/cla-api
 ```
 
