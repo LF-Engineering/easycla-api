@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  easycla-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - STAGE=dev
+      - AWS_REGION=us-east-2
+      - CLA_SERVICE_AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - CLA_SERVICE_AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+  rest-tests:
+    build:
+      context: tests/rest
+      dockerfile: Dockerfile
+    depends_on:
+      - easycla-api
+    environment:
+      - API_URL=http://easycla-api:8080
