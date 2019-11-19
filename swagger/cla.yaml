@@ -224,7 +224,6 @@ paths:
           name: cla_group
           schema:
             $ref: '#/definitions/create_cla_group'
-
       consumes:
         - application/json
       produces:
@@ -232,6 +231,8 @@ paths:
       responses:
         '201':
           description: Success
+          schema:
+            $ref: '#/definitions/cla_group'
         '400':
           $ref: '#/responses/invalid-request'
         '401':
