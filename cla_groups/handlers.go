@@ -17,6 +17,15 @@ func Configure(api *operations.ClaAPI, service Service) {
 			}
 			return cla_groups.NewCreateCLAGroupCreated().WithPayload(result)
 		})
+
+	api.ClaGroupsDeleteCLAGroupHandler = cla_groups.DeleteCLAGroupHandlerFunc(
+		func(params cla_groups.DeleteCLAGroupParams) middleware.Responder {
+			err := service.DeleteCLAGroup(&params)
+			if err != nil {
+				return cla_groups.NewDeleteCLAGroupBadRequest().WithPayload(errorResponse(err))
+			}
+			return cla_groups.NewDeleteCLAGroupOK()
+		})
 }
 
 type codedResponse interface {

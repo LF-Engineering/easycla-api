@@ -25,6 +25,7 @@ const (
 // Repository interface defines methods of cla_groups repository service
 type Repository interface {
 	CreateCLAGroup(in *models.CreateClaGroup) (*models.ClaGroup, error)
+	DeleteCLAGroup(claGroupID string) error
 }
 
 type repository struct {
@@ -84,4 +85,22 @@ func (r *repository) CreateCLAGroup(in *models.CreateClaGroup) (*models.ClaGroup
 		FoundationID:    *in.FoundationID,
 		ProjectManagers: in.ProjectManagers,
 	}, nil
+}
+
+func (r *repository) DeleteCLAGroup(claGroupID string) error {
+	err := sqlz.Newx(r.GetDB()).Transactional(func(tx *sqlz.Tx) error {
+		_, err := tx.
+			DeleteFrom(CLAGroupProjectManagerTable).
+			Where(sqlz.Eq("cla_group_id", claGroupID)).
+			Exec()
+		if err != nil {
+			return err
+		}
+		_, err = tx.
+			DeleteFrom(CLAGroupsTable).
+			Where(sqlz.Eq("id", claGroupID)).
+			Exec()
+		return err
+	})
+	return err
 }

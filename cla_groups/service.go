@@ -8,9 +8,9 @@ import (
 // Service interface defines methods of cla_groups service
 type Service interface {
 	CreateCLAGroup(in *cla_groups.CreateCLAGroupParams) (*models.ClaGroup, error)
+	DeleteCLAGroup(in *cla_groups.DeleteCLAGroupParams) error
 	/*
 		UpdateCLAGroup(in *params.UpdateCLAGroupParams) error
-		DeleteCLAGroup(in *params.DeleteCLAGroupParams) error
 		ListCLAGroups(in *params.GetCLAGroupsParams) (models.ClaGroupList, error) */
 }
 
@@ -25,4 +25,8 @@ func NewService(repo Repository) Service {
 
 func (s *service) CreateCLAGroup(in *cla_groups.CreateCLAGroupParams) (*models.ClaGroup, error) {
 	return s.repo.CreateCLAGroup(in.ClaGroup)
+}
+
+func (s *service) DeleteCLAGroup(in *cla_groups.DeleteCLAGroupParams) error {
+	return s.repo.DeleteCLAGroup(in.ClaGroupID)
 }
