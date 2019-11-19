@@ -189,6 +189,118 @@ paths:
       tags:
         - events
 
+  /cla_groups:
+    get:
+      security: []
+      summary: get list of CLA groups
+      description: return filtered list of CLA groups
+      operationId: getCLAGroups
+      parameters:
+        - $ref: '#/parameters/foundation_id'
+        - $ref: '#/parameters/project_manager_id'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/cla_group_list'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+      tags:
+        - cla-groups
+    post:
+      security: []
+      summary: create CLA group
+      description: Creates CLA group
+      operationId: createCLAGroup
+      parameters:
+        - in: body
+          description: CLA group to create
+          name: cla_group
+          schema:
+            $ref: '#/definitions/create_cla_group'
+
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Success
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+      tags:
+        - cla-groups
+
+  /cla_groups/{cla_group_id}:
+    put:
+      security: []
+      summary: update CLA group
+      description: update CLA group
+      operationId: updateCLAGroup
+      parameters:
+        - in: path
+          description: ID of the CLA group to update
+          name: cla_group_id
+          type: string
+          required: true
+        - in: body
+          description: CLA group to update
+          name: cla_group
+          schema:
+            $ref: '#/definitions/update_cla_group'
+
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+      tags:
+        - cla-groups
+    delete:
+      security: []
+      summary: delete the CLA group
+      description: delete the CLA group
+      operationId: deleteCLAGroup
+      parameters:
+        - in: path
+          description: ID of the CLA group to delete
+          name: cla_group_id
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+      tags:
+        - cla-groups
+
 definitions:
   health:
     type: object
@@ -451,10 +563,84 @@ definitions:
         description: id od the organization/company
       event_time:
         type: integer
-        description: time of the event in epoch format. 
+        description: time of the event in epoch format.
       event_data:
         type: string
         description: data related to the event
+
+  create_cla_group:
+    type: object
+    required:  # List the required properties here
+    - foundation_id
+    - cla_group_name
+    - ccla_enabled
+    - icla_enabled
+    properties:
+      foundation_id:
+        type: string
+        description: unique id of the foundation in SalesForce
+      cla_group_name:
+        type: string
+        description: name of the CLA group
+        example: CNCF
+      ccla_enabled:
+        type: boolean
+        description: is CCLA enabled
+      icla_enabled:
+        type: boolean
+        description: is ICLA enabled
+      project_managers:
+        type: array
+        items:
+          type: string
+          format: uuid
+
+  update_cla_group:
+    type: object
+    properties:
+      cla_group_name:
+        type: string
+        description: name of the CLA group
+        example: CNCF
+      ccla_enabled:
+        type: boolean
+        description: is CCLA enabled
+      icla_enabled:
+        type: boolean
+        description: is ICLA enabled
+
+  cla_group_list:
+    type: object
+    properties:
+      cla_groups:
+        type: array
+        items:
+          $ref: '#/definitions/cla_group'
+
+  cla_group:
+    type: object
+    properties:
+      id:
+        type: string
+        description: unique id of the CLA group
+      foundation_id:
+        type: string
+        description: unique id of the foundation in SalesForce
+      cla_group_name:
+        type: string
+        description: name of the CLA group
+        example: CNCF
+      ccla_enabled:
+        type: boolean
+        description: is CCLA enabled
+      icla_enabled:
+        type: boolean
+        description: is ICLA enabled
+      project_managers:
+        type: array
+        items:
+          type: string
+          format: uuid
 
 responses:
   unauthorized:
@@ -533,3 +719,13 @@ parameters:
     description: return result created after this time. Time must be in epoch format in seconds.
     in: query
     type: integer
+  foundation_id:
+    name: foundation_id
+    description: unique id of the foundation
+    in: query
+    type: string
+  project_manager_id:
+    name: project_manager_id
+    description: unique id of the project_manager
+    in: query
+    type: string
