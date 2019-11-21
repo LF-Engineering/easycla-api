@@ -37,3 +37,6 @@ Desktop.ini
 **/.DS_Store
 
 vendor/
+
+#Python
+__pycache__
