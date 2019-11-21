@@ -162,7 +162,7 @@ paths:
       parameters:
         - $ref: '#/parameters/page_size'
         - $ref: '#/parameters/offset'
-        - $ref: '#/parameters/order_by'
+        - $ref: '#/parameters/events_order_by'
         - $ref: '#/parameters/sort_order'
         - $ref: '#/parameters/event_type'
         - $ref: '#/parameters/user_id'
@@ -194,10 +194,14 @@ paths:
       security: []
       summary: get list of CLA groups
       description: return filtered list of CLA groups
-      operationId: getCLAGroups
+      operationId: listCLAGroups
       parameters:
         - $ref: '#/parameters/foundation_id'
         - $ref: '#/parameters/project_manager_id'
+        - $ref: '#/parameters/page_size'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/cla_groups_order_by'
+        - $ref: '#/parameters/sort_order'
       produces:
         - application/json
       responses:
@@ -259,7 +263,6 @@ paths:
           name: cla_group
           schema:
             $ref: '#/definitions/update_cla_group'
-
       consumes:
         - application/json
       produces:
@@ -273,6 +276,8 @@ paths:
           $ref: '#/responses/unauthorized'
         '403':
           $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
       tags:
         - cla-groups
     delete:
@@ -637,6 +642,12 @@ definitions:
       icla_enabled:
         type: boolean
         description: is ICLA enabled
+      created_at:
+        type: integer
+        description: time at which cla_group is created
+      updated_at:
+        type: integer
+        description: time at which cla_group was updated
       project_managers:
         type: array
         items:
@@ -678,7 +689,7 @@ parameters:
     in: query
     type: integer
     default: 0
-  order_by:
+  events_order_by:
     name: order_by
     description: The field to order by, default sort order is ascending
     in: query
@@ -730,3 +741,9 @@ parameters:
     description: unique id of the project_manager
     in: query
     type: string
+  cla_groups_order_by:
+    name: order_by
+    description: The field to order by, default sort order is ascending
+    in: query
+    type: string
+    enum: [created_at,updated_at,cla_group_name,foundation_id]
