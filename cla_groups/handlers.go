@@ -1,6 +1,8 @@
 package cla_groups
 
 import (
+	"strconv"
+
 	"github.com/communitybridge/easycla-api/gen/models"
 	"github.com/communitybridge/easycla-api/gen/restapi/operations"
 	"github.com/communitybridge/easycla-api/gen/restapi/operations/cla_groups"
@@ -25,6 +27,30 @@ func Configure(api *operations.ClaAPI, service Service) {
 				return cla_groups.NewDeleteCLAGroupBadRequest().WithPayload(errorResponse(err))
 			}
 			return cla_groups.NewDeleteCLAGroupOK()
+		})
+
+	api.ClaGroupsUpdateCLAGroupHandler = cla_groups.UpdateCLAGroupHandlerFunc(
+		func(params cla_groups.UpdateCLAGroupParams) middleware.Responder {
+			err := service.UpdateCLAGroup(&params)
+			if err != nil {
+				if err == ErrClaGroupNotFound {
+					return cla_groups.NewDeleteCLAGroupNotFound().WithPayload(&models.ErrorResponse{
+						Code:    strconv.Itoa(cla_groups.UpdateCLAGroupNotFoundCode),
+						Message: err.Error(),
+					})
+				}
+				return cla_groups.NewUpdateCLAGroupBadRequest().WithPayload(errorResponse(err))
+			}
+			return cla_groups.NewUpdateCLAGroupOK()
+		})
+
+	api.ClaGroupsListCLAGroupsHandler = cla_groups.ListCLAGroupsHandlerFunc(
+		func(params cla_groups.ListCLAGroupsParams) middleware.Responder {
+			response, err := service.ListCLAGroups(&params)
+			if err != nil {
+				return cla_groups.NewListCLAGroupsBadRequest().WithPayload(errorResponse(err))
+			}
+			return cla_groups.NewListCLAGroupsOK().WithPayload(response)
 		})
 }
 

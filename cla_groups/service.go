@@ -9,9 +9,8 @@ import (
 type Service interface {
 	CreateCLAGroup(in *cla_groups.CreateCLAGroupParams) (*models.ClaGroup, error)
 	DeleteCLAGroup(in *cla_groups.DeleteCLAGroupParams) error
-	/*
-		UpdateCLAGroup(in *params.UpdateCLAGroupParams) error
-		ListCLAGroups(in *params.GetCLAGroupsParams) (models.ClaGroupList, error) */
+	UpdateCLAGroup(in *cla_groups.UpdateCLAGroupParams) error
+	ListCLAGroups(in *cla_groups.ListCLAGroupsParams) (*models.ClaGroupList, error)
 }
 
 type service struct {
@@ -29,4 +28,12 @@ func (s *service) CreateCLAGroup(in *cla_groups.CreateCLAGroupParams) (*models.C
 
 func (s *service) DeleteCLAGroup(in *cla_groups.DeleteCLAGroupParams) error {
 	return s.repo.DeleteCLAGroup(in.ClaGroupID)
+}
+
+func (s *service) UpdateCLAGroup(in *cla_groups.UpdateCLAGroupParams) error {
+	return s.repo.UpdateCLAGroup(in.ClaGroupID, in.ClaGroup)
+}
+
+func (s *service) ListCLAGroups(in *cla_groups.ListCLAGroupsParams) (*models.ClaGroupList, error) {
+	return s.repo.ListCLAGroups(in)
 }
