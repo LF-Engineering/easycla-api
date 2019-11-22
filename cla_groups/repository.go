@@ -30,7 +30,7 @@ var (
 const (
 	// DuplicateCLAGroupNameError is an error string
 	// returned by postgres when unique contraint of cla_group_name fails
-	DuplicateCLAGroupNameError = `pq: duplicate key value violates unique constraint "cla_groups_cla_group_name_key"`
+	DuplicateCLAGroupNameError = `pq: duplicate key value violates unique constraint "cla_groups_foundation_id_cla_group_name_key"`
 )
 
 // Repository interface defines methods of cla_groups repository service

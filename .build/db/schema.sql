@@ -106,11 +106,11 @@ ALTER TABLE ONLY cla.cla_group_project_managers
 
 
 --
--- Name: cla_groups cla_groups_cla_group_name_key; Type: CONSTRAINT; Schema: cla; Owner: -
+-- Name: cla_groups cla_groups_foundation_id_cla_group_name_key; Type: CONSTRAINT; Schema: cla; Owner: -
 --
 
 ALTER TABLE ONLY cla.cla_groups
-    ADD CONSTRAINT cla_groups_cla_group_name_key UNIQUE (cla_group_name);
+    ADD CONSTRAINT cla_groups_foundation_id_cla_group_name_key UNIQUE (foundation_id, cla_group_name);
 
 
 --

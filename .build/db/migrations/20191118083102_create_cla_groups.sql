@@ -2,12 +2,13 @@
 
 create table cla.cla_groups (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
-  cla_group_name varchar(255) UNIQUE NOT NULL,
+  cla_group_name varchar(255) NOT NULL,
   foundation_id varchar(255) NOT NULL,
   created_at BIGINT NOT NULL DEFAULT extract(epoch from now()),
   updated_at BIGINT NOT NULL DEFAULT extract(epoch from now()),
   ccla_enabled boolean,
   icla_enabled boolean,
+  UNIQUE (foundation_id, cla_group_name),
   PRIMARY KEY(id)
 );
 
