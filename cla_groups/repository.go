@@ -2,7 +2,6 @@ package cla_groups
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/communitybridge/easycla-api/gen/models"
@@ -191,9 +190,6 @@ func createListCLAGroupQuery(db *sqlx.DB, in *cla_groups.ListCLAGroupsParams) *s
 	} else {
 		stmt = stmt.OrderBy(sqlz.Asc(orderBy))
 	}
-	s, b := stmt.ToSQL(false)
-	fmt.Println(s, b)
-
 	return stmt
 }
 
