@@ -121,7 +121,7 @@ func server(localMode bool) http.Handler {
 	events.Configure(api, eventsService)
 
 	claGroupsRepo := cla_groups.NewRepository(db)
-	claGroupsService := cla_groups.NewService(claGroupsRepo)
+	claGroupsService := cla_groups.NewService(claGroupsRepo, eventsService)
 	cla_groups.Configure(api, claGroupsService)
 	return api.Serve(setupMiddlewares)
 }

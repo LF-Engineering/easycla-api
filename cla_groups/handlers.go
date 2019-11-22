@@ -24,6 +24,12 @@ func Configure(api *operations.ClaAPI, service Service) {
 		func(params cla_groups.DeleteCLAGroupParams) middleware.Responder {
 			err := service.DeleteCLAGroup(&params)
 			if err != nil {
+				if err == ErrClaGroupNotFound {
+					return cla_groups.NewDeleteCLAGroupNotFound().WithPayload(&models.ErrorResponse{
+						Code:    strconv.Itoa(cla_groups.DeleteCLAGroupNotFoundCode),
+						Message: err.Error(),
+					})
+				}
 				return cla_groups.NewDeleteCLAGroupBadRequest().WithPayload(errorResponse(err))
 			}
 			return cla_groups.NewDeleteCLAGroupOK()
@@ -34,7 +40,7 @@ func Configure(api *operations.ClaAPI, service Service) {
 			err := service.UpdateCLAGroup(&params)
 			if err != nil {
 				if err == ErrClaGroupNotFound {
-					return cla_groups.NewDeleteCLAGroupNotFound().WithPayload(&models.ErrorResponse{
+					return cla_groups.NewUpdateCLAGroupNotFound().WithPayload(&models.ErrorResponse{
 						Code:    strconv.Itoa(cla_groups.UpdateCLAGroupNotFoundCode),
 						Message: err.Error(),
 					})

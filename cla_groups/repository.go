@@ -1,6 +1,7 @@
 package cla_groups
 
 import (
+	"database/sql"
 	"errors"
 	"time"
 
@@ -101,17 +102,30 @@ func (r *repository) CreateCLAGroup(in *models.CreateClaGroup) (*models.ClaGroup
 
 func (r *repository) DeleteCLAGroup(claGroupID string) error {
 	err := sqlz.Newx(r.GetDB()).Transactional(func(tx *sqlz.Tx) error {
-		_, err := tx.
+		var err error
+		var res sql.Result
+		var rowsAffected int64
+		_, err = tx.
 			DeleteFrom(CLAGroupProjectManagerTable).
 			Where(sqlz.Eq("cla_group_id", claGroupID)).
 			Exec()
 		if err != nil {
 			return err
 		}
-		_, err = tx.
+		res, err = tx.
 			DeleteFrom(CLAGroupsTable).
 			Where(sqlz.Eq("id", claGroupID)).
 			Exec()
+		if err != nil {
+			return err
+		}
+		rowsAffected, err = res.RowsAffected()
+		if err != nil {
+			return err
+		}
+		if rowsAffected == 0 {
+			err = ErrClaGroupNotFound
+		}
 		return err
 	})
 	return err
