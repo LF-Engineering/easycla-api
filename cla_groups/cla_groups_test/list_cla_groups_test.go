@@ -139,7 +139,7 @@ func Test_repository_ListCLAGroups(t *testing.T) {
 			if !assert.Equal(t, len(tt.want.ClaGroups), len(got.ClaGroups)) {
 				return
 			}
-			for i, _ := range got.ClaGroups {
+			for i := range got.ClaGroups {
 				if !assert.Equal(t,
 					tt.want.ClaGroups[i], got.ClaGroups[i],
 					expectedClaGroupOrderMsg(got.ClaGroups, tt.want.ClaGroups)) {
