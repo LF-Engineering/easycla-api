@@ -27,7 +27,10 @@ func TestMain(m *testing.M) {
 
 	testfixtures.SkipDatabaseNameCheck(true)
 	viper.SetDefault("TEST_DATABASE_DSN", "dbname=cla-test password=test user=test port=5432 sslmode=disable")
-	viper.BindEnv("TEST_DATABASE_DSN")
+	err = viper.BindEnv("TEST_DATABASE_DSN")
+	if err != nil {
+		log.Fatal(err)
+	}
 	db, err = sql.Open("postgres", viper.GetString("TEST_DATABASE_DSN"))
 	if err != nil {
 		log.Fatal(err)
