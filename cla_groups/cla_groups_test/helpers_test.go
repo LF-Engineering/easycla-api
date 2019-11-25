@@ -15,11 +15,11 @@ func newBool(b bool) *bool {
 	return &b
 }
 
-func isCLAGroupPresent(claGroupId string) bool {
+func isCLAGroupPresent(claGroupID string) bool {
 	count, err := sqlz.Newx(sqlxDB).
 		Select("*").
 		From(cla_groups.CLAGroupsTable).
-		Where(sqlz.Eq("id", claGroupId)).GetCount()
+		Where(sqlz.Eq("id", claGroupID)).GetCount()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,11 +37,11 @@ func numberOfCLAGroups() int64 {
 	return count
 }
 
-func getCLAGroup(id string) (*cla_groups.SQLCLAGroups,error) {
+func getCLAGroup(id string) (*cla_groups.SQLCLAGroups, error) {
 	var res cla_groups.SQLCLAGroups
 	err := sqlz.Newx(sqlxDB).
 		Select("*").From(cla_groups.CLAGroupsTable).
-		Where(sqlz.Eq("id",id)).
+		Where(sqlz.Eq("id", id)).
 		GetRow(&res)
 	if err != nil {
 		return nil, err
@@ -49,11 +49,11 @@ func getCLAGroup(id string) (*cla_groups.SQLCLAGroups,error) {
 	return &res, nil
 }
 
-func numberOfProjectManagers(claGroupId string) int64 {
+func numberOfProjectManagers(claGroupID string) int64 {
 	count, err := sqlz.Newx(sqlxDB).
 		Select("*").
 		From(cla_groups.CLAGroupProjectManagerTable).
-		Where(sqlz.Eq("cla_group_id", claGroupId)).GetCount()
+		Where(sqlz.Eq("cla_group_id", claGroupID)).GetCount()
 	if err != nil {
 		log.Fatal(err)
 	}

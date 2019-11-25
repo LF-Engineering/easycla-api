@@ -2,11 +2,12 @@ package cla_groups_test
 
 import (
 	"context"
+	"testing"
+	"time"
+
 	"github.com/communitybridge/easycla-api/cla_groups"
 	"github.com/communitybridge/easycla-api/gen/restapi/operations/events"
 	"github.com/stretchr/testify/assert"
-	"testing"
-	"time"
 
 	"github.com/communitybridge/easycla-api/gen/models"
 	params "github.com/communitybridge/easycla-api/gen/restapi/operations/cla_groups"
@@ -17,8 +18,8 @@ func Test_CreateCLAGroup(t *testing.T) {
 	prepareTestDatabase()
 	totalClaGroups := numberOfCLAGroups()
 	assert.Equal(t, 3, int(totalClaGroups))
-	foundationId := "CNCFCreateTest"
-	claGroupName := "cncf cla"
+	projectID := "CNCFCreateTest"
+	claGroupName := "cncf kubernetes cla"
 	projectManager := "413f4711-a3c3-4635-9dad-a0ba58694205"
 	tests := []struct {
 		name    string
@@ -31,14 +32,14 @@ func Test_CreateCLAGroup(t *testing.T) {
 			args: &models.CreateClaGroup{
 				CclaEnabled:     newBool(true),
 				IclaEnabled:     newBool(false),
-				ProjectID:       newString(foundationId),
+				ProjectID:       newString(projectID),
 				ClaGroupName:    newString(claGroupName),
 				ProjectManagers: []strfmt.UUID{strfmt.UUID(projectManager)},
 			},
 			want: &models.ClaGroup{
 				CclaEnabled:     true,
 				IclaEnabled:     false,
-				ProjectID:       foundationId,
+				ProjectID:       projectID,
 				ClaGroupName:    claGroupName,
 				ProjectManagers: []strfmt.UUID{strfmt.UUID(projectManager)},
 			},
@@ -86,7 +87,7 @@ func Test_CreateCLAGroup(t *testing.T) {
 				t.Fail()
 			}
 
-			list, err := claGroupsService.ListCLAGroups(&params.ListCLAGroupsParams{ProjectID: &foundationId})
+			list, err := claGroupsService.ListCLAGroups(&params.ListCLAGroupsParams{ProjectID: tt.args.ProjectID})
 			if !assert.Nil(t, err, "get cla group list failed") {
 				t.Fail()
 			}

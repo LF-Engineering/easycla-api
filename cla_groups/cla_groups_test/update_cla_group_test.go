@@ -2,12 +2,13 @@ package cla_groups_test
 
 import (
 	"context"
+	"testing"
+
 	"github.com/communitybridge/easycla-api/cla_groups"
 	"github.com/communitybridge/easycla-api/gen/models"
 	params "github.com/communitybridge/easycla-api/gen/restapi/operations/cla_groups"
 	"github.com/communitybridge/easycla-api/gen/restapi/operations/events"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func Test_UpdateCLAGroup(t *testing.T) {
@@ -25,15 +26,14 @@ func Test_UpdateCLAGroup(t *testing.T) {
 		{
 			name: "success",
 			args: &params.UpdateCLAGroupParams{
-				ClaGroup : &models.UpdateClaGroup{
+				ClaGroup: &models.UpdateClaGroup{
 					CclaEnabled:  false,
 					IclaEnabled:  true,
 					ClaGroupName: claGroupName,
 				},
-				ClaGroupID:claGroupID,
-
+				ClaGroupID: claGroupID,
 			},
-			want: nil,
+			want:    nil,
 			wantErr: false,
 		},
 	}
@@ -44,11 +44,11 @@ func Test_UpdateCLAGroup(t *testing.T) {
 				t.Errorf("CreateCLAGroup() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !assert.Equal(t, 3, int(totalClaGroups),"number of cla_groups should not change") {
+			if !assert.Equal(t, 3, int(totalClaGroups), "number of cla_groups should not change") {
 				t.Fail()
 			}
-			res,err := getCLAGroup(tt.args.ClaGroupID)
-			if !assert.Nil(t,err) {
+			res, err := getCLAGroup(tt.args.ClaGroupID)
+			if !assert.Nil(t, err) {
 				t.Fail()
 			}
 			if !assert.Equal(t, res.CCLAEnabled.Bool, tt.args.ClaGroup.CclaEnabled) {

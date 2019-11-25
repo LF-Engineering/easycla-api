@@ -11,17 +11,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	DataloaderClaGroupID = "d9dc5834-3d9a-4d04-abb6-4a36ed378304"
+)
+
 func Test_DeleteCLAGroup(t *testing.T) {
 	prepareTestDatabase()
-	claGroupId := "d9dc5834-3d9a-4d04-abb6-4a36ed378304"
-	nonExistentClaGroupId := "e9dc5834-3d9a-4d04-abb6-4a36ed378304"
+	claGroupID := DataloaderClaGroupID
+	nonExistentClaGroupID := "e9dc5834-3d9a-4d04-abb6-4a36ed378300"
 	/* Check if db is in required state */
-	if !assert.Equal(t, true, isCLAGroupPresent(claGroupId),
-		fmt.Sprintf("cla_group with id : %s must be present", claGroupId)) {
+	if !assert.Equal(t, true, isCLAGroupPresent(claGroupID),
+		fmt.Sprintf("cla_group with id : %s must be present", claGroupID)) {
 		t.Fail()
 	}
-	if !assert.Equal(t, 2, int(numberOfProjectManagers(claGroupId)),
-		fmt.Sprintf("cla_group %s must have 2 project managers", claGroupId)) {
+	if !assert.Equal(t, 2, int(numberOfProjectManagers(claGroupID)),
+		fmt.Sprintf("cla_group %s must have 2 project managers", claGroupID)) {
 		t.Fail()
 	}
 	list, err := eventsService.SearchEvents(context.TODO(), &events.SearchEventsParams{})
@@ -41,7 +45,7 @@ func Test_DeleteCLAGroup(t *testing.T) {
 		{
 			name: "cla_group exist",
 			args: &params.DeleteCLAGroupParams{
-				ClaGroupID: claGroupId,
+				ClaGroupID: claGroupID,
 			},
 			want:    nil,
 			wantErr: false,
@@ -49,7 +53,7 @@ func Test_DeleteCLAGroup(t *testing.T) {
 		{
 			name: "cla_group not exist",
 			args: &params.DeleteCLAGroupParams{
-				ClaGroupID: nonExistentClaGroupId,
+				ClaGroupID: nonExistentClaGroupID,
 			},
 			want:    cla_groups.ErrClaGroupNotFound,
 			wantErr: true,
