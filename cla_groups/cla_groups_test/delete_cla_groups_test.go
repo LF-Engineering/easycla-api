@@ -3,37 +3,14 @@ package cla_groups_test
 import (
 	"context"
 	"fmt"
-	"log"
 	"testing"
 
 	"github.com/communitybridge/easycla-api/cla_groups"
 	params "github.com/communitybridge/easycla-api/gen/restapi/operations/cla_groups"
 	"github.com/communitybridge/easycla-api/gen/restapi/operations/events"
-	"github.com/ido50/sqlz"
 	"github.com/stretchr/testify/assert"
 )
 
-func isCLAGroupPresent(claGroupId string) bool {
-	count, err := sqlz.Newx(sqlxDB).
-		Select("*").
-		From(cla_groups.CLAGroupsTable).
-		Where(sqlz.Eq("id", claGroupId)).GetCount()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return count == 1
-}
-
-func numberOfProjectManagers(claGroupId string) int64 {
-	count, err := sqlz.Newx(sqlxDB).
-		Select("*").
-		From(cla_groups.CLAGroupProjectManagerTable).
-		Where(sqlz.Eq("cla_group_id", claGroupId)).GetCount()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return count
-}
 func Test_DeleteCLAGroup(t *testing.T) {
 	prepareTestDatabase()
 	claGroupId := "d9dc5834-3d9a-4d04-abb6-4a36ed378304"
