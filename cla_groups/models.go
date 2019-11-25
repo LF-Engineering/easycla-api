@@ -8,7 +8,7 @@ import (
 type SQLCLAGroups struct {
 	ID           sql.NullString `db:"id"`
 	CLAGroupName sql.NullString `db:"cla_group_name"`
-	FoundationID sql.NullString `db:"foundation_id"`
+	ProjectID    sql.NullString `db:"project_id"`
 	CreatedAt    sql.NullInt64  `db:"created_at"`
 	UpdatedAt    sql.NullInt64  `db:"updated_at"`
 	CCLAEnabled  sql.NullBool   `db:"ccla_enabled"`

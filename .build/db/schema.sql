@@ -65,7 +65,7 @@ CREATE TABLE cla.cla_group_project_managers (
 CREATE TABLE cla.cla_groups (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     cla_group_name character varying(255) NOT NULL,
-    foundation_id character varying(255) NOT NULL,
+    project_id character varying(255) NOT NULL,
     created_at bigint DEFAULT date_part('epoch'::text, now()) NOT NULL,
     updated_at bigint DEFAULT date_part('epoch'::text, now()) NOT NULL,
     ccla_enabled boolean,
@@ -106,19 +106,19 @@ ALTER TABLE ONLY cla.cla_group_project_managers
 
 
 --
--- Name: cla_groups cla_groups_foundation_id_cla_group_name_key; Type: CONSTRAINT; Schema: cla; Owner: -
---
-
-ALTER TABLE ONLY cla.cla_groups
-    ADD CONSTRAINT cla_groups_foundation_id_cla_group_name_key UNIQUE (foundation_id, cla_group_name);
-
-
---
 -- Name: cla_groups cla_groups_pkey; Type: CONSTRAINT; Schema: cla; Owner: -
 --
 
 ALTER TABLE ONLY cla.cla_groups
     ADD CONSTRAINT cla_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cla_groups cla_groups_project_id_cla_group_name_key; Type: CONSTRAINT; Schema: cla; Owner: -
+--
+
+ALTER TABLE ONLY cla.cla_groups
+    ADD CONSTRAINT cla_groups_project_id_cla_group_name_key UNIQUE (project_id, cla_group_name);
 
 
 --

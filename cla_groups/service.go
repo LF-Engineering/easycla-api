@@ -35,7 +35,7 @@ func (s *service) CreateCLAGroup(in *cla_groups.CreateCLAGroupParams) (*models.C
 	s.createEvent("user", "", "", CLAGroupCreated, CLAGroupCreatedEvent{
 		ClaGroupID:   result.ID,
 		ClaGroupName: result.ClaGroupName,
-		FoundationID: result.FoundationID,
+		ProjectID:    result.ProjectID,
 		CclaEnabled:  result.CclaEnabled,
 		IclaEnabled:  result.IclaEnabled,
 	})

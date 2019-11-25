@@ -20,7 +20,7 @@ type CLAGroupCreatedEvent struct {
 	ClaGroupName string `json:"cla_group_name,omitempty"`
 	CclaEnabled  bool   `json:"ccla_enabled,omitempty"`
 	IclaEnabled  bool   `json:"icla_enabled,omitempty"`
-	FoundationID string `json:"foundation_id,omitempty"`
+	ProjectID    string `json:"project_id,omitempty"`
 }
 
 // CLAGroupUpdatedEvent is data for cla_group_updated event

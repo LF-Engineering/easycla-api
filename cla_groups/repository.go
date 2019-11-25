@@ -30,7 +30,7 @@ var (
 const (
 	// DuplicateCLAGroupNameError is an error string
 	// returned by postgres when unique contraint of cla_group_name fails
-	DuplicateCLAGroupNameError = `pq: duplicate key value violates unique constraint "cla_groups_foundation_id_cla_group_name_key"`
+	DuplicateCLAGroupNameError = `pq: duplicate key value violates unique constraint "cla_groups_project_id_cla_group_name_key"`
 )
 
 // Repository interface defines methods of cla_groups repository service
@@ -60,7 +60,7 @@ func (r *repository) CreateCLAGroup(in *models.CreateClaGroup) (*models.ClaGroup
 	var claGroupID string
 	values := make(map[string]interface{})
 	values["cla_group_name"] = in.ClaGroupName
-	values["foundation_id"] = in.FoundationID
+	values["project_id"] = in.ProjectID
 	values["ccla_enabled"] = in.CclaEnabled
 	values["icla_enabled"] = in.IclaEnabled
 	err := sqlz.Newx(r.GetDB()).Transactional(func(tx *sqlz.Tx) error {
@@ -95,7 +95,7 @@ func (r *repository) CreateCLAGroup(in *models.CreateClaGroup) (*models.ClaGroup
 	return &models.ClaGroup{
 		ID:              claGroupID,
 		ClaGroupName:    *in.ClaGroupName,
-		FoundationID:    *in.FoundationID,
+		ProjectID:       *in.ProjectID,
 		ProjectManagers: in.ProjectManagers,
 	}, nil
 }
@@ -159,7 +159,7 @@ func createListCLAGroupQuery(db *sqlx.DB, in *cla_groups.ListCLAGroupsParams) *s
 	stmt := sqlz.Newx(db).
 		Select(`
 			cg.id,
-			cg.foundation_id,
+			cg.project_id,
 			cg.cla_group_name,
 			cg.icla_enabled,
 			cg.ccla_enabled,
@@ -170,9 +170,9 @@ func createListCLAGroupQuery(db *sqlx.DB, in *cla_groups.ListCLAGroupsParams) *s
 		LeftJoin(CLAGroupProjectManagerTable+" cgm", sqlz.Eq("cg.id", sqlz.Indirect("cgm.cla_group_id")))
 
 	var conditions []sqlz.WhereCondition
-	if in.FoundationID != nil {
+	if in.ProjectID != nil {
 		conditions = append(conditions,
-			sqlz.Eq("cg.foundation_id", *in.FoundationID))
+			sqlz.Eq("cg.project_id", *in.ProjectID))
 	}
 
 	if in.ProjectManagerID != nil {
@@ -219,7 +219,7 @@ func (r *repository) ListCLAGroups(in *cla_groups.ListCLAGroupsParams) (*models.
 	for rows.Next() {
 		var cg models.ClaGroup
 		err := rows.Scan(&cg.ID,
-			&cg.FoundationID,
+			&cg.ProjectID,
 			&cg.ClaGroupName,
 			&cg.IclaEnabled,
 			&cg.CclaEnabled,
