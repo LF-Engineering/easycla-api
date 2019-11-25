@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	db       *sql.DB
+	sqlxDB   *sqlx.DB
 	fixtures *testfixtures.Context
 )
 
@@ -24,6 +24,7 @@ var eventsService events.Service
 
 func TestMain(m *testing.M) {
 	var err error
+	var db *sql.DB
 
 	testfixtures.SkipDatabaseNameCheck(true)
 	viper.SetDefault("TEST_DATABASE_DSN", "dbname=cla-test password=test user=test port=5432 sslmode=disable")
@@ -47,7 +48,7 @@ func TestMain(m *testing.M) {
 		log.Fatal(err)
 	}
 
-	sqlxDB := sqlx.NewDb(db, "postgres")
+	sqlxDB = sqlx.NewDb(db, "postgres")
 	eventsRepo := events.NewRepository(sqlxDB)
 	eventsService = events.NewService(eventsRepo)
 

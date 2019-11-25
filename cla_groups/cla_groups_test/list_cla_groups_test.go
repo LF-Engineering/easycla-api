@@ -43,7 +43,7 @@ var Prometheus = &models.ClaGroup{
 	UpdatedAt:       20,
 }
 
-func Test_repository_ListCLAGroups(t *testing.T) {
+func Test_ListCLAGroups(t *testing.T) {
 	prepareTestDatabase()
 	var cncf = "CNCF"
 	var projectManagerID = "413f4711-a3c3-4635-9dad-a0ba58694202"
