@@ -10,6 +10,7 @@ import (
 	"github.com/communitybridge/easycla-api/events"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"github.com/spf13/viper"
 	"gopkg.in/testfixtures.v2"
 )
 
@@ -25,7 +26,9 @@ func TestMain(m *testing.M) {
 	var err error
 
 	testfixtures.SkipDatabaseNameCheck(true)
-	db, err = sql.Open("postgres", "dbname=cla password=prasanna user=prasanna port=5432 sslmode=disable")
+	viper.SetDefault("TEST_DATABASE_DSN", "dbname=cla-test password=test user=test port=5432 sslmode=disable")
+	viper.BindEnv("TEST_DATABASE_DSN")
+	db, err = sql.Open("postgres", viper.GetString("TEST_DATABASE_DSN"))
 	if err != nil {
 		log.Fatal(err)
 	}
