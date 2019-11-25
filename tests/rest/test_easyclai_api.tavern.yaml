@@ -1,0 +1,28 @@
+---
+test_name: API Health
+
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Health Check endpoint v4/ops/health
+    max_retries: 5
+    delay_after: 10
+    request:
+      url: "{api_url}/v4/ops/health"
+      method: GET
+    response:
+      status_code: 200
+      body:
+        Branch: master
+        Healths: 
+         - 
+          Healthy: true
+          Name: "CLA Health"
+         - 
+          Healthy: true
+          Name: "CLA - Dynamodb"
+         - 
+          Healthy: true
+          Name: "CLA - RDS"
+        Status: healthy
