@@ -57,18 +57,18 @@ func (r *repository) GetDB() *sqlx.DB {
 }
 
 func (r *repository) CreateCLAGroup(in *models.CreateClaGroup) (*models.ClaGroup, error) {
-	var claGroupID string
+	var result SQLCLAGroups
 	values := make(map[string]interface{})
-	values["cla_group_name"] = in.ClaGroupName
-	values["project_id"] = in.ProjectID
-	values["ccla_enabled"] = in.CclaEnabled
-	values["icla_enabled"] = in.IclaEnabled
+	values["cla_group_name"] = *in.ClaGroupName
+	values["project_id"] = *in.ProjectID
+	values["ccla_enabled"] = *in.CclaEnabled
+	values["icla_enabled"] = *in.IclaEnabled
 	err := sqlz.Newx(r.GetDB()).Transactional(func(tx *sqlz.Tx) error {
-		err := tx.
+		stmt := tx.
 			InsertInto(CLAGroupsTable).
 			ValueMap(values).
-			Returning("id").
-			GetRow(&claGroupID)
+			Returning("id", "created_at", "updated_at")
+		err := stmt.GetRow(&result)
 		if err != nil {
 			return err
 		}
@@ -76,7 +76,7 @@ func (r *repository) CreateCLAGroup(in *models.CreateClaGroup) (*models.ClaGroup
 			_, err = tx.
 				InsertInto(CLAGroupProjectManagerTable).
 				Columns("cla_group_id", "project_manager_id").
-				Values(claGroupID, projectManagerID).
+				Values(result.ID, projectManagerID).
 				Exec()
 			if err != nil {
 				return err
@@ -93,10 +93,14 @@ func (r *repository) CreateCLAGroup(in *models.CreateClaGroup) (*models.ClaGroup
 		}
 	}
 	return &models.ClaGroup{
-		ID:              claGroupID,
+		ID:              result.ID.String,
 		ClaGroupName:    *in.ClaGroupName,
 		ProjectID:       *in.ProjectID,
 		ProjectManagers: in.ProjectManagers,
+		IclaEnabled:     *in.IclaEnabled,
+		CclaEnabled:     *in.CclaEnabled,
+		CreatedAt:       result.CreatedAt.Int64,
+		UpdatedAt:       result.UpdatedAt.Int64,
 	}, nil
 }
 
