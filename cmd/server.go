@@ -67,7 +67,7 @@ func server(localMode bool) http.Handler {
 		log.Panicf("Unable to load AWS session - Error: %v", err)
 	}
 
-	configFile, err := config.LoadConfig(configFile, awsSession, stage)
+	conf, err := config.LoadConfig(configFile, awsSession, stage)
 	if err != nil {
 		log.Panicf("Unable to load config - Error: %v", err)
 	}
@@ -87,10 +87,10 @@ func server(localMode bool) http.Handler {
 	log.Infof("AWS_REGION              : %s", os.Getenv("AWS_REGION"))
 	log.Infof("Service Host            : %s", host)
 	log.Infof("Service Port (localonly): %d", *portFlag)
-	log.Infof("RDS Host                : %s", configFile.RDSHost)
-	log.Infof("RDS Database            : %s", configFile.RDSDatabase)
-	log.Infof("RDS Username            : %s", configFile.RDSUsername)
-	log.Infof("RDS Port                : %d", configFile.RDSPort)
+	log.Infof("RDS Host                : %s", conf.RDSHost)
+	log.Infof("RDS Database            : %s", conf.RDSDatabase)
+	log.Infof("RDS Username            : %s", conf.RDSUsername)
+	log.Infof("RDS Port                : %d", conf.RDSPort)
 
 	swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
 	if err != nil {
@@ -100,7 +100,7 @@ func server(localMode bool) http.Handler {
 	api := operations.NewClaAPI(swaggerSpec)
 
 	// Initialize the DB connection
-	db := initDB(configFile)
+	db := initDB(conf)
 
 	healthRepo := health.NewRepository(db)
 	healthService := health.New(healthRepo, Version, Commit, Branch, BuildDate)

@@ -1,0 +1,7 @@
+{
+    "rds_database": "",
+    "rds_host": "",
+    "rds_port": 5432,
+    "rds_username": "",
+    "rds_password": ""
+}
