@@ -31,14 +31,14 @@ func Test_CreateCLAGroup(t *testing.T) {
 			args: &models.CreateClaGroup{
 				CclaEnabled:     newBool(true),
 				IclaEnabled:     newBool(false),
-				FoundationID:    newString(foundationId),
+				ProjectID:       newString(foundationId),
 				ClaGroupName:    newString(claGroupName),
 				ProjectManagers: []strfmt.UUID{strfmt.UUID(projectManager)},
 			},
 			want: &models.ClaGroup{
 				CclaEnabled:     true,
 				IclaEnabled:     false,
-				FoundationID:    foundationId,
+				ProjectID:       foundationId,
 				ClaGroupName:    claGroupName,
 				ProjectManagers: []strfmt.UUID{strfmt.UUID(projectManager)},
 			},
@@ -67,7 +67,7 @@ func Test_CreateCLAGroup(t *testing.T) {
 			if !assert.Equal(t, tt.want.ClaGroupName, res.ClaGroupName, "cla_group_name do not match") {
 				t.Fail()
 			}
-			if !assert.Equal(t, tt.want.FoundationID, res.FoundationID, "foundation_id do not match") {
+			if !assert.Equal(t, tt.want.ProjectID, res.ProjectID, "project_id do not match") {
 				t.Fail()
 			}
 			if !assert.Equal(t, tt.want.ProjectManagers, res.ProjectManagers, "project managers do not match") {
@@ -86,14 +86,14 @@ func Test_CreateCLAGroup(t *testing.T) {
 				t.Fail()
 			}
 
-			list, err := claGroupsService.ListCLAGroups(&params.ListCLAGroupsParams{FoundationID:&foundationId})
-			if !assert.Nil(t,err,"get cla group list failed") {
+			list, err := claGroupsService.ListCLAGroups(&params.ListCLAGroupsParams{ProjectID: &foundationId})
+			if !assert.Nil(t, err, "get cla group list failed") {
 				t.Fail()
 			}
-			if !assert.Equal(t, len(list.ClaGroups),int(1)) {
+			if !assert.Equal(t, len(list.ClaGroups), int(1)) {
 				t.Fail()
 			}
-			if !assert.Equal(t, list.ClaGroups[0],res){
+			if !assert.Equal(t, list.ClaGroups[0], res) {
 				t.Fail()
 			}
 			elist, err := eventsService.SearchEvents(context.TODO(), &events.SearchEventsParams{})
@@ -103,10 +103,9 @@ func Test_CreateCLAGroup(t *testing.T) {
 			if !assert.Equal(t, 1, len(elist.Events)) {
 				t.Fail()
 			}
-			if !assert.Equal(t, cla_groups.CLAGroupUpdated, elist.Events[0].EventType) {
+			if !assert.Equal(t, cla_groups.CLAGroupCreated, elist.Events[0].EventType) {
 				t.Fail()
 			}
 		})
 	}
 }
-

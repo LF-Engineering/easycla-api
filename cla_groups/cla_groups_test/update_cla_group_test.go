@@ -67,7 +67,7 @@ func Test_UpdateCLAGroup(t *testing.T) {
 			if !assert.Equal(t, 1, len(list.Events)) {
 				t.Fail()
 			}
-			if !assert.Equal(t, cla_groups.CLAGroupDeleted, list.Events[0].EventType) {
+			if !assert.Equal(t, cla_groups.CLAGroupUpdated, list.Events[0].EventType) {
 				t.Fail()
 			}
 		})

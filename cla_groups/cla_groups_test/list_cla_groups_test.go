@@ -14,7 +14,7 @@ var Dataloader = &models.ClaGroup{
 	CclaEnabled:     true,
 	ClaGroupName:    "Dataloader",
 	CreatedAt:       2,
-	FoundationID:    "GraphQL",
+	ProjectID:       "GraphQL",
 	IclaEnabled:     false,
 	ID:              "d9dc5834-3d9a-4d04-abb6-4a36ed378304",
 	ProjectManagers: []strfmt.UUID{"413f4711-a3c3-4635-9dad-a0ba58694203", "413f4711-a3c3-4635-9dad-a0ba58694204"},
@@ -25,7 +25,7 @@ var Kubernetes = &models.ClaGroup{
 	CclaEnabled:     true,
 	ClaGroupName:    "Kubernetes",
 	CreatedAt:       1,
-	FoundationID:    "CNCF",
+	ProjectID:       "CNCF",
 	IclaEnabled:     true,
 	ID:              "73007448-6192-403b-86f2-9ee00ea07060",
 	ProjectManagers: []strfmt.UUID{"413f4711-a3c3-4635-9dad-a0ba58694201"},
@@ -36,7 +36,7 @@ var Prometheus = &models.ClaGroup{
 	CclaEnabled:     true,
 	ClaGroupName:    "Prometheus",
 	CreatedAt:       3,
-	FoundationID:    "CNCF",
+	ProjectID:       "CNCF",
 	IclaEnabled:     false,
 	ID:              "086bb357-349a-492b-b64d-230a357f3712",
 	ProjectManagers: []strfmt.UUID{"413f4711-a3c3-4635-9dad-a0ba58694201", "413f4711-a3c3-4635-9dad-a0ba58694202"},
@@ -67,9 +67,9 @@ func Test_ListCLAGroups(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "filter by foundation_id",
+			name: "filter by project_id",
 			args: &cla_groups.ListCLAGroupsParams{
-				FoundationID: &cncf,
+				ProjectID: &cncf,
 			},
 			want: &models.ClaGroupList{
 				ClaGroups: []*models.ClaGroup{Kubernetes, Prometheus},
@@ -87,9 +87,9 @@ func Test_ListCLAGroups(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "filter by foundation_id, project_manager_id",
+			name: "filter by project_id, project_manager_id",
 			args: &cla_groups.ListCLAGroupsParams{
-				FoundationID:     &cncf,
+				ProjectID:        &cncf,
 				ProjectManagerID: &projectManagerID,
 			},
 			want: &models.ClaGroupList{
