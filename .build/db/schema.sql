@@ -49,6 +49,31 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: cla_group_project_managers; Type: TABLE; Schema: cla; Owner: -
+--
+
+CREATE TABLE cla.cla_group_project_managers (
+    cla_group_id uuid NOT NULL,
+    project_manager_id uuid NOT NULL
+);
+
+
+--
+-- Name: cla_groups; Type: TABLE; Schema: cla; Owner: -
+--
+
+CREATE TABLE cla.cla_groups (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    cla_group_name character varying(255) NOT NULL,
+    project_id character varying(255) NOT NULL,
+    created_at bigint DEFAULT date_part('epoch'::text, now()) NOT NULL,
+    updated_at bigint DEFAULT date_part('epoch'::text, now()) NOT NULL,
+    ccla_enabled boolean,
+    icla_enabled boolean
+);
+
+
+--
 -- Name: events; Type: TABLE; Schema: cla; Owner: -
 --
 
@@ -73,6 +98,30 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: cla_group_project_managers cla_group_project_managers_pkey; Type: CONSTRAINT; Schema: cla; Owner: -
+--
+
+ALTER TABLE ONLY cla.cla_group_project_managers
+    ADD CONSTRAINT cla_group_project_managers_pkey PRIMARY KEY (cla_group_id, project_manager_id);
+
+
+--
+-- Name: cla_groups cla_groups_pkey; Type: CONSTRAINT; Schema: cla; Owner: -
+--
+
+ALTER TABLE ONLY cla.cla_groups
+    ADD CONSTRAINT cla_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cla_groups cla_groups_project_id_cla_group_name_key; Type: CONSTRAINT; Schema: cla; Owner: -
+--
+
+ALTER TABLE ONLY cla.cla_groups
+    ADD CONSTRAINT cla_groups_project_id_cla_group_name_key UNIQUE (project_id, cla_group_name);
+
+
+--
 -- Name: events events_pkey; Type: CONSTRAINT; Schema: cla; Owner: -
 --
 
@@ -89,6 +138,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: cla_group_project_managers cla_group_project_managers_cla_group_id_fkey; Type: FK CONSTRAINT; Schema: cla; Owner: -
+--
+
+ALTER TABLE ONLY cla.cla_group_project_managers
+    ADD CONSTRAINT cla_group_project_managers_cla_group_id_fkey FOREIGN KEY (cla_group_id) REFERENCES cla.cla_groups(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -98,4 +155,5 @@ ALTER TABLE ONLY public.schema_migrations
 --
 
 INSERT INTO public.schema_migrations (version) VALUES
-    ('20191112093719');
+    ('20191112093719'),
+    ('20191118083102');
