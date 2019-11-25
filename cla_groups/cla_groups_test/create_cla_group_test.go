@@ -1,6 +1,9 @@
 package cla_groups_test
 
 import (
+	"context"
+	"github.com/communitybridge/easycla-api/cla_groups"
+	"github.com/communitybridge/easycla-api/gen/restapi/operations/events"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -14,7 +17,7 @@ func Test_CreateCLAGroup(t *testing.T) {
 	prepareTestDatabase()
 	totalClaGroups := numberOfCLAGroups()
 	assert.Equal(t, 3, int(totalClaGroups))
-	foundationId := "CNCF"
+	foundationId := "CNCFCreateTest"
 	claGroupName := "cncf cla"
 	projectManager := "413f4711-a3c3-4635-9dad-a0ba58694205"
 	tests := []struct {
@@ -70,12 +73,40 @@ func Test_CreateCLAGroup(t *testing.T) {
 			if !assert.Equal(t, tt.want.ProjectManagers, res.ProjectManagers, "project managers do not match") {
 				t.Fail()
 			}
+			if !assert.Equal(t, len(tt.want.ProjectManagers), int(numberOfProjectManagers(res.ID)), "project managers do not match") {
+				t.Fail()
+			}
 			if !assert.Equal(t, true, strfmt.IsUUID4(res.ID), "id is not valid") {
 				t.Fail()
 			}
-			if !assert.Equal(t, true, res.CreatedAt >= currentTime, "current_time is not valid") {
+			if !assert.Equal(t, true, res.CreatedAt >= currentTime, "created_at is not valid") {
+				t.Fail()
+			}
+			if !assert.Equal(t, true, res.UpdatedAt >= currentTime, "updated_at is not valid") {
+				t.Fail()
+			}
+
+			list, err := claGroupsService.ListCLAGroups(&params.ListCLAGroupsParams{FoundationID:&foundationId})
+			if !assert.Nil(t,err,"get cla group list failed") {
+				t.Fail()
+			}
+			if !assert.Equal(t, len(list.ClaGroups),int(1)) {
+				t.Fail()
+			}
+			if !assert.Equal(t, list.ClaGroups[0],res){
+				t.Fail()
+			}
+			elist, err := eventsService.SearchEvents(context.TODO(), &events.SearchEventsParams{})
+			if !assert.Nil(t, err) {
+				t.Fail()
+			}
+			if !assert.Equal(t, 1, len(elist.Events)) {
+				t.Fail()
+			}
+			if !assert.Equal(t, cla_groups.CLAGroupUpdated, elist.Events[0].EventType) {
 				t.Fail()
 			}
 		})
 	}
 }
+

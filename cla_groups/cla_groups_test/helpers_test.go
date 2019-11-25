@@ -37,6 +37,18 @@ func numberOfCLAGroups() int64 {
 	return count
 }
 
+func getCLAGroup(id string) (*cla_groups.SQLCLAGroups,error) {
+	var res cla_groups.SQLCLAGroups
+	err := sqlz.Newx(sqlxDB).
+		Select("*").From(cla_groups.CLAGroupsTable).
+		Where(sqlz.Eq("id",id)).
+		GetRow(&res)
+	if err != nil {
+		return nil, err
+	}
+	return &res, nil
+}
+
 func numberOfProjectManagers(claGroupId string) int64 {
 	count, err := sqlz.Newx(sqlxDB).
 		Select("*").
