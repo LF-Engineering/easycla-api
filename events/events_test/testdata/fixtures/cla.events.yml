@@ -1,0 +1,42 @@
+- company_id: company-3
+  event_data: '{"user": "mani", "event": "UserDeleted"}'
+  event_time: 1
+  event_type: UserDeleted
+  id: ac3980ce-0374-4bbe-88a0-abb59ad10392
+  project_id: gRPC
+  user_id: mani
+- company_id: company-2
+  event_data: '{"user": "prasannamahajan", "event": "UserUpdated"}'
+  event_time: 2
+  event_type: UserUpdated
+  id: 7c493c31-3dd7-475f-84b3-fc8f876eceb5
+  project_id: Prometheus
+  user_id: prasannamahajan
+- company_id: company-1
+  event_data: null
+  event_time: 3
+  event_type: EmptyEventData
+  id: 3529ad99-8be4-408d-92b1-fa4de6e677e1
+  project_id: Kubernetes
+  user_id: mani
+- company_id: company-3
+  event_data: '{"user": "ddeal", "event": "UserAdded"}'
+  event_time: 4
+  event_type: UserAdded
+  id: 7e3df980-8288-46ce-8e8a-40e50d8222fe
+  project_id: null
+  user_id: ddeal
+- company_id: company-1
+  event_data: '{"user": "mani", "event": "UserDeleted"}'
+  event_time: 5
+  event_type: UserDeleted
+  id: 296abfb7-07da-4184-b905-63d8423ba2a2
+  project_id: Prometheus
+  user_id: mani
+- company_id: company-2
+  event_data: '{"user": "ddeal", "event": "UserUpdated"}'
+  event_time: 6
+  event_type: UserUpdated
+  id: 3f7f4ab3-3214-4be8-8ad5-ef42f9f223f0
+  project_id: null
+  user_id: ddeal
