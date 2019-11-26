@@ -24,6 +24,7 @@ declare -r container_version="0.2.0"
 declare -r container_fullname="${container_owner}/${container_name}:${container_version}"
 declare -r cla_app_folder=${HOME}/projects/go/src/github.com/communitybridge/easycla/cla-backend/cla
 
+
 if [[ ! -f Dockerfile ]]; then
   echo "Missing Dockerfile in current folder. Exiting..."
   exit 1

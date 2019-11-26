@@ -4,7 +4,6 @@ RUN mkdir cla logs
 ADD requirements.txt *.py /
 RUN pip install --no-cache-dir -r requirements.txt
 
-
 ADD cla /cla 
 
-CMD [ "python", "data_migration.py" ]
+ENTRYPOINT [ "python", "./data_migration.py" ]
