@@ -26,7 +26,6 @@ func TestMain(m *testing.M) {
 	var err error
 	var db *sql.DB
 
-	testfixtures.SkipDatabaseNameCheck(true)
 	viper.SetDefault("TEST_DATABASE_DSN", "dbname=cla-test password=test user=test port=5432 sslmode=disable")
 	err = viper.BindEnv("TEST_DATABASE_DSN")
 	if err != nil {

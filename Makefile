@@ -72,7 +72,7 @@ fmt:
 	@goimports -w -l $(GO_FILES)
 
 test:
-	@ $(TEST_ENV) go test -v $(shell go list ./... | grep -v /vendor/ | grep -v /node_modules/) -coverprofile=cover.out
+	@ $(TEST_ENV) go test -p 1 -v $(shell go list ./... | grep -v /vendor/ | grep -v /node_modules/) -coverprofile=cover.out
 
 run:
 	go run main.go
