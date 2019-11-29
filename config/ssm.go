@@ -65,5 +65,14 @@ func loadSSMConfig(awsSession *session.Session, stage string) (Config, error) {
 		return Config{}, err
 	}
 
+	config.GithubWebhookSecret, err = getSSMString(ssmClient, fmt.Sprintf("cla-github-webhook-secret-%s", stage))
+	if err != nil {
+		return Config{}, err
+	}
+
+	config.GithubAppPrivateKey, err = getSSMString(ssmClient, fmt.Sprintf("cla-github-app-private-key-%s", stage))
+	if err != nil {
+		return Config{}, err
+	}
 	return config, nil
 }
