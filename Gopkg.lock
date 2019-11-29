@@ -511,6 +511,14 @@
   version = "v0.3.2"
 
 [[projects]]
+  digest = "1:06910f78a994c97cd152ad02f9007432f546ce4ba7e9294d4ea08bc262f0c55f"
+  name = "gopkg.in/testfixtures.v2"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "572ce0c218ae72aea460616fc9d7c5c81d76e458"
+  version = "v2.6.0"
+
+[[projects]]
   digest = "1:59f10c1537d2199d9115d946927fe31165959a95190849c82ff11e05803528b0"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
@@ -550,6 +558,7 @@
     "github.com/spf13/viper",
     "github.com/stretchr/testify/assert",
     "golang.org/x/net/netutil",
+    "gopkg.in/testfixtures.v2",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

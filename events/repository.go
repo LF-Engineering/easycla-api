@@ -127,6 +127,7 @@ func (r *repository) SearchEvents(ctx context.Context, params *events.SearchEven
 		return nil, err
 	}
 	var result models.EventList
+	result.Events = make([]*models.Event, 0)
 	for _, e := range events {
 		result.Events = append(result.Events, e.toEvent())
 	}

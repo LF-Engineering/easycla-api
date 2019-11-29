@@ -8,6 +8,7 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/communitybridge/easycla-api/cla_groups"
 	"github.com/communitybridge/easycla-api/config"
 	"github.com/communitybridge/easycla-api/events"
 	"github.com/communitybridge/easycla-api/orgs"
@@ -118,6 +119,10 @@ func server(localMode bool) http.Handler {
 	eventsRepo := events.NewRepository(db)
 	eventsService := events.NewService(eventsRepo)
 	events.Configure(api, eventsService)
+
+	claGroupsRepo := cla_groups.NewRepository(db)
+	claGroupsService := cla_groups.NewService(claGroupsRepo, eventsService)
+	cla_groups.Configure(api, claGroupsService)
 	return api.Serve(setupMiddlewares)
 }
 
