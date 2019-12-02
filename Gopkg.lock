@@ -103,12 +103,28 @@
   version = "v0.5.0"
 
 [[projects]]
+  digest = "1:e0c707db323e135ad46d1197436966f6276dca1d97f2626e859e63527db84d4c"
+  name = "github.com/bradleyfalzon/ghinstallation"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "7bdf9f8bf3828df62ed87398508beee1a22a34b1"
+  version = "v0.1.3"
+
+[[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   pruneopts = "UT"
   revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
   version = "v1.1.1"
+
+[[projects]]
+  digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
 
 [[projects]]
   digest = "1:e95ef557dc3120984bb66b385ae01b4bb8ff56bcde28e7b0d1beed0cccc4d69f"
@@ -546,6 +562,7 @@
     "github.com/aws/aws-sdk-go/service/cloudwatch",
     "github.com/aws/aws-sdk-go/service/ssm",
     "github.com/awslabs/aws-lambda-go-api-proxy/httpadapter",
+    "github.com/bradleyfalzon/ghinstallation",
     "github.com/go-openapi/errors",
     "github.com/go-openapi/loads",
     "github.com/go-openapi/runtime",
