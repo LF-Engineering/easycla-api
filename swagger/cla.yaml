@@ -41,6 +41,22 @@ tags:
   - name: easycla
 
 paths:
+  /github/activity:
+    post:
+      security: []
+      operationId: githubWebhook
+      consumes:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/x-github-event'
+        - $ref: '#/parameters/x-hub-signature'
+        - $ref: '#/parameters/x-github-delivery'
+      responses:
+        '200':
+          description: 'Success'
+      tags:
+        - webhook
+
   /ops/health:
     get:
       summary: API Health Check
@@ -764,6 +780,24 @@ parameters:
     in: query
     type: string
     enum: [created_at,updated_at,cla_group_name,project_id]
+  x-github-event:
+    name: X-GitHub-Event
+    description: Name of the github event type that triggered the delivery.
+    type: string
+    in: header
+    required: true
+  x-github-delivery:
+    name: X-GitHub-Delivery
+    description: A GUID to identify the delivery.
+    type: string
+    in: header
+    required: true
+  x-hub-signature:
+    name: X-Hub-Signature
+    description: github webhook signature param
+    type: string
+    in: header
+    required: true
   x-acl:
     name: X-ACL
     description: The access control list header value encoded as base64 - assigned by the API Gateway based on user/request permissions
