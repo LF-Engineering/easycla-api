@@ -43,6 +43,7 @@ tags:
 paths:
   /github/activity:
     post:
+      security: []
       operationId: githubWebhook
       consumes:
         - application/json
