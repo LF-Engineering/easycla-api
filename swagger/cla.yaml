@@ -33,7 +33,7 @@ tags:
   - name: easycla
 
 paths:
-  /webhook/github:
+  /github/activity:
     post:
       operationId: githubWebhook
       consumes:

@@ -15,6 +15,7 @@ import (
 	"github.com/communitybridge/easycla-api/events"
 	"github.com/communitybridge/easycla-api/orgs"
 	"github.com/communitybridge/easycla-api/projects"
+	"github.com/communitybridge/easycla-api/webhook"
 
 	"github.com/communitybridge/easycla-api/apidocs"
 	"github.com/communitybridge/easycla-api/gen/restapi"
@@ -94,6 +95,8 @@ func server(localMode bool) http.Handler {
 	log.Infof("RDS Username            : %s", conf.RDSUsername)
 	log.Infof("RDS Port                : %d", conf.RDSPort)
 	log.Infof("Github Webhook Secret   : %s...", conf.GithubWebhookSecret[:5])
+	log.Infof("Github App Private Key  : %s...", conf.GithubAppPrivateKey[:50])
+	log.Infof("Github App ID           : %d", conf.GithubAppID)
 
 	swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
 	if err != nil {
@@ -126,7 +129,8 @@ func server(localMode bool) http.Handler {
 	claGroupsService := cla_groups.NewService(claGroupsRepo, eventsService)
 	cla_groups.Configure(api, claGroupsService)
 
-	github.Configure(api, conf)
+	github.Init(conf)
+	webhook.Configure(api, conf)
 	return api.Serve(setupMiddlewares)
 }
 

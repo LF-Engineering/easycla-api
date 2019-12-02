@@ -1,4 +1,4 @@
-package github
+package webhook
 
 import (
 	"log"
@@ -10,6 +10,7 @@ import (
 	"github.com/google/go-github/github"
 )
 
+// Configure github webhook
 func Configure(api *operations.ClaAPI, config config.Config) {
 	api.WebhookGithubWebhookHandler = webhook.GithubWebhookHandlerFunc(
 		func(params webhook.GithubWebhookParams) middleware.Responder {
@@ -38,7 +39,7 @@ func handleGithubEvent(params webhook.GithubWebhookParams, webhookSecretKey []by
 	`, event.GetInstallation().GetID(),
 			event.GetInstallation().GetAppID())
 	case *github.PullRequestEvent:
-		log.Println("got pull request event", event)
+		ProcessPullRequestEvent(event)
 	default:
 		log.Println(event)
 	}

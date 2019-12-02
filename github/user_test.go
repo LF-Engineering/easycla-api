@@ -2,10 +2,12 @@ package github
 
 import (
 	"testing"
+
+	"github.com/communitybridge/easycla-api/config"
 )
 
 func TestGetUsernameFromID(t *testing.T) {
-	Init()
+	Init(config.Config{})
 	type args struct {
 		id int64
 	}
@@ -47,7 +49,7 @@ func TestGetUsernameFromID(t *testing.T) {
 }
 
 func TestGetIDFromUsername(t *testing.T) {
-	Init()
+	Init(config.Config{})
 	type args struct {
 		username string
 	}

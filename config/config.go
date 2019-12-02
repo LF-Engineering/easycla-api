@@ -20,6 +20,7 @@ type Config struct {
 	RDSPort             int    `json:"rds_port"`
 	GithubWebhookSecret string `json:"github_webhook_secret"`
 	GithubAppPrivateKey string `json:"github_app_private_key"`
+	GithubAppID         int    `json:"github_app_id"`
 }
 
 // LoadConfig loads the configuration
