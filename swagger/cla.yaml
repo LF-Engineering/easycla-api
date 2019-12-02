@@ -5,6 +5,14 @@ info:
   title: EasyCLA API
   version: '1.0.0'
 basePath: /v4
+securityDefinitions:
+  lf-auth:
+    type: apiKey
+    name: X-ACL
+    in: header
+    description: Requires X-ACL headers and bearer token
+security:
+  - lf-auth: []
 schemes:
   - http
 
@@ -110,11 +118,13 @@ paths:
 
   /orgs/{salesForceOrganizationId}:
     get:
-      security: []
       summary: list foundations affiliated with the organization
       description: Returns list of foundations affiliated with the organization of organization manager
       operationId: getOrgFoundations
       parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
         - name: salesForceOrganizationId
           description: SalesForce ID of organization
           in: path
@@ -140,11 +150,13 @@ paths:
 
   /projects/{projectID}:
     get:
-      security: []
       summary: Get project
       description: Returns details of the project
       operationId: getProject
       parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
         - name: projectID
           description: ID of the project
           in: path
@@ -170,11 +182,13 @@ paths:
 
   /events:
     get:
-      security: []
       summary: search events
       description: Returns list of events matching with search criteria
       operationId: searchEvents
       parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
         - $ref: '#/parameters/page_size'
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/events_order_by'
@@ -206,11 +220,13 @@ paths:
 
   /cla_groups:
     get:
-      security: []
       summary: get list of CLA groups
       description: return filtered list of CLA groups
       operationId: listCLAGroups
       parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
         - $ref: '#/parameters/project_id'
         - $ref: '#/parameters/project_manager_id'
         - $ref: '#/parameters/page_size'
@@ -233,11 +249,13 @@ paths:
       tags:
         - cla-groups
     post:
-      security: []
       summary: create CLA group
       description: Creates CLA group
       operationId: createCLAGroup
       parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
         - in: body
           description: CLA group to create
           name: cla_group
@@ -263,11 +281,13 @@ paths:
 
   /cla_groups/{cla_group_id}:
     put:
-      security: []
       summary: update CLA group
       description: update CLA group
       operationId: updateCLAGroup
       parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
         - in: path
           description: ID of the CLA group to update
           name: cla_group_id
@@ -296,11 +316,13 @@ paths:
       tags:
         - cla-groups
     delete:
-      security: []
       summary: delete the CLA group
       description: delete the CLA group
       operationId: deleteCLAGroup
       parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
         - in: path
           description: ID of the CLA group to delete
           name: cla_group_id
@@ -746,11 +768,6 @@ parameters:
     description: return result created after this time. Time must be in epoch format in seconds.
     in: query
     type: integer
-  project_id:
-    name: project_id
-    description: unique id of the project
-    in: query
-    type: string
   project_manager_id:
     name: project_manager_id
     description: unique id of the project_manager
@@ -780,3 +797,19 @@ parameters:
     type: string
     in: header
     required: true
+  x-acl:
+    name: X-ACL
+    description: The access control list header value encoded as base64 - assigned by the API Gateway based on user/request permissions
+    in: header
+    type: string
+    required: true
+  x-username:
+    name: X-USERNAME
+    description: The username/LFID value - assigned/set by the API Gateway based on login credentials
+    in: header
+    type: string
+  x-email:
+    name: X-EMAIL
+    description: The email value - assigned/set by the API Gateway based on login credentials
+    in: header
+    type: string
