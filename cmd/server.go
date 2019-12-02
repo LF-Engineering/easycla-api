@@ -8,6 +8,8 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/LF-Engineering/lfx-kit/auth"
+
 	"github.com/communitybridge/easycla-api/cla_groups"
 	"github.com/communitybridge/easycla-api/config"
 	"github.com/communitybridge/easycla-api/events"
@@ -98,6 +100,7 @@ func server(localMode bool) http.Handler {
 	}
 
 	api := operations.NewClaAPI(swaggerSpec)
+	api.LfAuthAuth = auth.SwaggerAuth
 
 	// Initialize the DB connection
 	db := initDB(conf)

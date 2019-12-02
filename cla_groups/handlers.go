@@ -3,6 +3,8 @@ package cla_groups
 import (
 	"strconv"
 
+	"github.com/LF-Engineering/lfx-kit/auth"
+
 	"github.com/communitybridge/easycla-api/gen/models"
 	"github.com/communitybridge/easycla-api/gen/restapi/operations"
 	"github.com/communitybridge/easycla-api/gen/restapi/operations/cla_groups"
@@ -12,7 +14,10 @@ import (
 // Configure setups handlers on api with service
 func Configure(api *operations.ClaAPI, service Service) {
 	api.ClaGroupsCreateCLAGroupHandler = cla_groups.CreateCLAGroupHandlerFunc(
-		func(params cla_groups.CreateCLAGroupParams) middleware.Responder {
+		func(params cla_groups.CreateCLAGroupParams, user *auth.User) middleware.Responder {
+			if !user.Admin {
+				return cla_groups.NewCreateCLAGroupUnauthorized()
+			}
 			result, err := service.CreateCLAGroup(&params)
 			if err != nil {
 				return cla_groups.NewCreateCLAGroupBadRequest().WithPayload(errorResponse(err))
@@ -21,7 +26,7 @@ func Configure(api *operations.ClaAPI, service Service) {
 		})
 
 	api.ClaGroupsDeleteCLAGroupHandler = cla_groups.DeleteCLAGroupHandlerFunc(
-		func(params cla_groups.DeleteCLAGroupParams) middleware.Responder {
+		func(params cla_groups.DeleteCLAGroupParams, user *auth.User) middleware.Responder {
 			err := service.DeleteCLAGroup(&params)
 			if err != nil {
 				if err == ErrClaGroupNotFound {
@@ -36,7 +41,7 @@ func Configure(api *operations.ClaAPI, service Service) {
 		})
 
 	api.ClaGroupsUpdateCLAGroupHandler = cla_groups.UpdateCLAGroupHandlerFunc(
-		func(params cla_groups.UpdateCLAGroupParams) middleware.Responder {
+		func(params cla_groups.UpdateCLAGroupParams, user *auth.User) middleware.Responder {
 			err := service.UpdateCLAGroup(&params)
 			if err != nil {
 				if err == ErrClaGroupNotFound {
@@ -51,7 +56,7 @@ func Configure(api *operations.ClaAPI, service Service) {
 		})
 
 	api.ClaGroupsListCLAGroupsHandler = cla_groups.ListCLAGroupsHandlerFunc(
-		func(params cla_groups.ListCLAGroupsParams) middleware.Responder {
+		func(params cla_groups.ListCLAGroupsParams, user *auth.User) middleware.Responder {
 			response, err := service.ListCLAGroups(&params)
 			if err != nil {
 				return cla_groups.NewListCLAGroupsBadRequest().WithPayload(errorResponse(err))

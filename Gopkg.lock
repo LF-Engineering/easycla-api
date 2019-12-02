@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:3823fbd830a6b50238644e78b1bf79fba79e9e0ee9ed34fd551aa41e64f1d1b0"
+  name = "github.com/LF-Engineering/lfx-kit"
+  packages = ["auth"]
+  pruneopts = "UT"
+  revision = "542a850d9bb490a492abf2d42703caa9d45de637"
+  version = "v0.1.4"
+
+[[projects]]
   digest = "1:a2682518d905d662d984ef9959984ef87cecb777d379bfa9d9fe40e78069b3e4"
   name = "github.com/PuerkitoBio/purell"
   packages = ["."]
@@ -530,6 +538,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/LF-Engineering/lfx-kit/auth",
     "github.com/aws/aws-lambda-go/lambda",
     "github.com/aws/aws-sdk-go/aws",
     "github.com/aws/aws-sdk-go/aws/credentials",
