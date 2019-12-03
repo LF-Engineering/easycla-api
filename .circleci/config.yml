@@ -30,9 +30,6 @@ jobs:
           fingerprints:
             - "b2:f9:8f:56:21:28:e1:de:70:ad:60:b1:21:c9:bd:5d"
       - run:
-          name: Download dependencies
-          command: dep ensure -v
-      - run:
           name: Swagger Code Generation
           command: make swagger
       - run:
