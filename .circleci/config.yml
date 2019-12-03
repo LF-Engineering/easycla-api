@@ -20,20 +20,32 @@ jobs:
           fingerprints:
             - "be:d9:66:d5:e0:09:20:58:06:b5:c5:24:21:3b:64:3d"
             - "81:5b:7f:2f:6a:bb:49:f4:a1:8f:13:8d:26:5a:68:57"
-      - run:
-          name: Manually Setup SSH Key
-          command: |
-            echo "Setting up SSH keys for branch '${CIRCLE_BRANCH}' build."
-            mkdir -p $HOME/.ssh
-            echo ${GIT_SSH_PRIVATE_KEY} > $HOME/.ssh/lf-circleci-github-ssh-key
-            echo "SSH private key installed"
-            echo "Key is:"
-            # TODO REMOVE
-            cat $HOME/.ssh/lf-circleci-github-ssh-key
-            echo "Host github.com" > $HOME/.ssh/config
-            echo "  IdentityFile $HOME/.ssh/lf-circleci-github-ssh-key" >> $HOME/.ssh/config
-            echo "SSH config is:"
-            cat $HOME/.ssh/config
+      #- run:
+      #    name: Manually Setup SSH Key
+      #    command: |
+      #      if [[ -z ${GIT_SSH_PRIVATE_KEY} ]]; then
+      #        echo "GIT_SSH_PRIVATE_KEY is unset";
+      #        exit 1
+      #      else
+      #        echo "GIT_SSH_PRIVATE_KEY is set to '${GIT_SSH_PRIVATE_KEY}'";
+      #      fi
+      #
+      #     echo "Setting up SSH keys for branch '${CIRCLE_BRANCH}' build."
+      #     mkdir -p $HOME/.ssh
+      #     ssh_private_key_file="$HOME/.ssh/lf-circleci-github-ssh-key"
+      #
+      #     umask 077 && touch ${ssh_private_key_file} && chmod 0600 ${ssh_private_key_file}
+      #     echo "${GIT_SSH_PRIVATE_KEY}" > ${ssh_private_key_file}
+      #
+      #     echo "SSH private key installed in ${ssh_private_key_file}"
+      #     echo "Key is:"
+      #     # TODO REMOVE
+      #     cat ${ssh_private_key_file}
+      #
+      #     echo "Host github.com" > $HOME/.ssh/config
+      #     echo "  IdentityFile ${ssh_private_key_file}" >> $HOME/.ssh/config
+      #     echo "SSH config is:"
+      #     cat $HOME/.ssh/config
       - restore_cache:
           name: Restore Cache
           keys:
