@@ -16,6 +16,36 @@ jobs:
     working_directory: /go/src/github.com/communitybridge/easycla-api
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "be:d9:66:d5:e0:09:20:58:06:b5:c5:24:21:3b:64:3d"
+            - "81:5b:7f:2f:6a:bb:49:f4:a1:8f:13:8d:26:5a:68:57"
+      #- run:
+      #    name: Manually Setup SSH Key
+      #    command: |
+      #      if [[ -z ${GIT_SSH_PRIVATE_KEY} ]]; then
+      #        echo "GIT_SSH_PRIVATE_KEY is unset";
+      #        exit 1
+      #      else
+      #        echo "GIT_SSH_PRIVATE_KEY is set to '${GIT_SSH_PRIVATE_KEY}'";
+      #      fi
+      #
+      #     echo "Setting up SSH keys for branch '${CIRCLE_BRANCH}' build."
+      #     mkdir -p $HOME/.ssh
+      #     ssh_private_key_file="$HOME/.ssh/lf-circleci-github-ssh-key"
+      #
+      #     umask 077 && touch ${ssh_private_key_file} && chmod 0600 ${ssh_private_key_file}
+      #     echo "${GIT_SSH_PRIVATE_KEY}" > ${ssh_private_key_file}
+      #
+      #     echo "SSH private key installed in ${ssh_private_key_file}"
+      #     echo "Key is:"
+      #     # TODO REMOVE
+      #     cat ${ssh_private_key_file}
+      #
+      #     echo "Host github.com" > $HOME/.ssh/config
+      #     echo "  IdentityFile ${ssh_private_key_file}" >> $HOME/.ssh/config
+      #     echo "SSH config is:"
+      #     cat $HOME/.ssh/config
       - restore_cache:
           name: Restore Cache
           keys:
@@ -24,14 +54,8 @@ jobs:
           name: Install and setup
           command: make setup
       - run:
-          name: Install cover
-          command: go get golang.org/x/tools/cmd/cover
-      - add_ssh_keys:
-          fingerprints:
-            - "aa:a4:6b:7e:51:9c:31:a3:10:5a:43:e2:e4:87:b7:c0"
-      - run:
-          name: Download dependencies
-          command: dep ensure -v
+          name: Download dependencies for lfx-kit swagger models
+          command: make deps
       - run:
           name: Swagger Code Generation
           command: make swagger
@@ -41,6 +65,9 @@ jobs:
       - run:
           name: Download dependencies
           command: make deps
+      - run:
+          name: Build
+          command: make build
       - run:
           name: Lint
           command: make lint
