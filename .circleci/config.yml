@@ -16,6 +16,10 @@ jobs:
     working_directory: /go/src/github.com/communitybridge/easycla-api
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "b2:f9:8f:56:21:28:e1:de:70:ad:60:b1:21:c9:bd:5d"
+            - "81:5b:7f:2f:6a:bb:49:f4:a1:8f:13:8d:26:5a:68:57"
       - restore_cache:
           name: Restore Cache
           keys:
@@ -23,15 +27,6 @@ jobs:
       - run:
           name: Install and setup
           command: make setup
-      - run:
-          name: Install cover
-          command: go get golang.org/x/tools/cmd/cover
-      - add_ssh_keys:
-          fingerprints:
-            - "aa:a4:6b:7e:51:9c:31:a3:10:5a:43:e2:e4:87:b7:c0"
-      - run:
-          name: Download dependencies
-          command: dep ensure -v
       - run:
           name: Swagger Code Generation
           command: make swagger
@@ -42,14 +37,17 @@ jobs:
           name: Download dependencies
           command: make deps
       - run:
-          name: Lint
-          command: make lint
+          name: Build
+          command: make build
       - run:
           name: Prepare test database
           command: dbmate -d ".build/db/migrations" -s ".build/db/schema.sql" up
       - run:
           name: Test
           command: make test
+      - run:
+          name: Lint
+          command: make lint
       - save_cache:
           name: Save Dep Cache
           key: dep-packages-{{ checksum "Gopkg.lock" }}
