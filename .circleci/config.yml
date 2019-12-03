@@ -23,12 +23,17 @@ jobs:
       - run:
           name: Manually Setup SSH Key
           command: |
+            echo "Setting up SSH keys for branch '${CIRCLE_BRANCH}' build."
             mkdir -p $HOME/.ssh
-            cat ${GIT_SSH_PRIVATE_KEY} > $HOME/.ssh/lf-circleci-github-ssh-key
-            echo "SSH Private key installed"
-            head $HOME/.ssh/lf-circleci-github-ssh-key
+            echo ${GIT_SSH_PRIVATE_KEY} > $HOME/.ssh/lf-circleci-github-ssh-key
+            echo "SSH private key installed"
+            echo "Key is:"
+            # TODO REMOVE
+            cat $HOME/.ssh/lf-circleci-github-ssh-key
             echo "Host github.com" > $HOME/.ssh/config
             echo "  IdentityFile $HOME/.ssh/lf-circleci-github-ssh-key" >> $HOME/.ssh/config
+            echo "SSH config is:"
+            cat $HOME/.ssh/config
       - restore_cache:
           name: Restore Cache
           keys:
