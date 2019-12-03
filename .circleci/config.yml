@@ -28,7 +28,7 @@ jobs:
           command: go get golang.org/x/tools/cmd/cover
       - add_ssh_keys:
           fingerprints:
-            - "aa:a4:6b:7e:51:9c:31:a3:10:5a:43:e2:e4:87:b7:c0"
+            - "b2:f9:8f:56:21:28:e1:de:70:ad:60:b1:21:c9:bd:5d"
       - run:
           name: Download dependencies
           command: dep ensure -v
