@@ -20,6 +20,7 @@ jobs:
           fingerprints:
             - "be:d9:66:d5:e0:09:20:58:06:b5:c5:24:21:3b:64:3d"
             - "81:5b:7f:2f:6a:bb:49:f4:a1:8f:13:8d:26:5a:68:57"
+            - "93:37:45:0c:7c:92:c4:38:32:84:29:22:1b:de:c9:70"
       #- run:
       #    name: Manually Setup SSH Key
       #    command: |
