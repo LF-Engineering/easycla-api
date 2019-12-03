@@ -20,6 +20,15 @@ jobs:
           fingerprints:
             - "be:d9:66:d5:e0:09:20:58:06:b5:c5:24:21:3b:64:3d"
             - "81:5b:7f:2f:6a:bb:49:f4:a1:8f:13:8d:26:5a:68:57"
+      - run:
+          name: Manually Setup SSH Key
+          command: |
+            mkdir -p $HOME/.ssh
+            cat ${GIT_SSH_PRIVATE_KEY} > $HOME/.ssh/lf-circleci-github-ssh-key
+            echo "SSH Private key installed"
+            head $HOME/.ssh/lf-circleci-github-ssh-key
+            echo "Host github.com" > $HOME/.ssh/config
+            echo "  IdentityFile $HOME/.ssh/lf-circleci-github-ssh-key" >> $HOME/.ssh/config
       - restore_cache:
           name: Restore Cache
           keys:
