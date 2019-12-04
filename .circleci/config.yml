@@ -29,6 +29,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "aa:a4:6b:7e:51:9c:31:a3:10:5a:43:e2:e4:87:b7:c0"
+            - "54:5b:55:5f:58:3e:3c:82:c1:64:1f:c0:98:b4:16:0b"
       - run:
           name: Download dependencies
           command: dep ensure -v
