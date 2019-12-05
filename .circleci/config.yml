@@ -18,35 +18,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "be:d9:66:d5:e0:09:20:58:06:b5:c5:24:21:3b:64:3d"
-            - "81:5b:7f:2f:6a:bb:49:f4:a1:8f:13:8d:26:5a:68:57"
-            - "93:37:45:0c:7c:92:c4:38:32:84:29:22:1b:de:c9:70"
-      #- run:
-      #    name: Manually Setup SSH Key
-      #    command: |
-      #      if [[ -z ${GIT_SSH_PRIVATE_KEY} ]]; then
-      #        echo "GIT_SSH_PRIVATE_KEY is unset";
-      #        exit 1
-      #      else
-      #        echo "GIT_SSH_PRIVATE_KEY is set to '${GIT_SSH_PRIVATE_KEY}'";
-      #      fi
-      #
-      #     echo "Setting up SSH keys for branch '${CIRCLE_BRANCH}' build."
-      #     mkdir -p $HOME/.ssh
-      #     ssh_private_key_file="$HOME/.ssh/lf-circleci-github-ssh-key"
-      #
-      #     umask 077 && touch ${ssh_private_key_file} && chmod 0600 ${ssh_private_key_file}
-      #     echo "${GIT_SSH_PRIVATE_KEY}" > ${ssh_private_key_file}
-      #
-      #     echo "SSH private key installed in ${ssh_private_key_file}"
-      #     echo "Key is:"
-      #     # TODO REMOVE
-      #     cat ${ssh_private_key_file}
-      #
-      #     echo "Host github.com" > $HOME/.ssh/config
-      #     echo "  IdentityFile ${ssh_private_key_file}" >> $HOME/.ssh/config
-      #     echo "SSH config is:"
-      #     cat $HOME/.ssh/config
+            - "54:5b:55:5f:58:3e:3c:82:c1:64:1f:c0:98:b4:16:0b"
       - restore_cache:
           name: Restore Cache
           keys:
@@ -55,17 +27,11 @@ jobs:
           name: Install and setup
           command: make setup
       - run:
-          name: Download dependencies for lfx-kit swagger models
-          command: make deps
-      - run:
           name: Swagger Code Generation
           command: make swagger
       - run:
           name: Swagger Code Spec Validation
           command: make swagger-validate
-      - run:
-          name: Download dependencies
-          command: make deps
       - run:
           name: Build
           command: make build
