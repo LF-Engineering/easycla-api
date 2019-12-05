@@ -33,9 +33,6 @@ jobs:
           name: Swagger Code Spec Validation
           command: make swagger-validate
       - run:
-          name: Download dependencies
-          command: make deps
-      - run:
           name: Build
           command: make build
       - run:

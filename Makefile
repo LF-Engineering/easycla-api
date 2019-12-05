@@ -57,7 +57,7 @@ dbmate:
 clean:
 	rm -rf ./gen ./bin
 
-swagger: clean
+swagger: clean deps
 	mkdir gen
 	swagger -q generate server -t gen -f swagger/cla.yaml --exclude-main -A cla -P auth.User
 
