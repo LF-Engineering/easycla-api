@@ -22,7 +22,7 @@ jobs:
       - restore_cache:
           name: Restore Cache
           keys:
-            - dep-packages-{{ checksum "Gopkg.lock" }}
+            - dep-packages-{{ checksum "Gopkg.lock" }}-{{ .Environment.CACHE_VERSION }}
       - run:
           name: Install and setup
           command: make setup
@@ -46,7 +46,7 @@ jobs:
           command: make test
       - save_cache:
           name: Save Dep Cache
-          key: dep-packages-{{ checksum "Gopkg.lock" }}
+          key: dep-packages-{{ checksum "Gopkg.lock" }}-{{ .Environment.CACHE_VERSION }}
           paths:
             - vendor
             - node_modules
