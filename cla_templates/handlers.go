@@ -21,6 +21,21 @@ func Configure(api *operations.ClaAPI, service Service) {
 			return cla_templates.NewCreateCLATemplateCreated().WithPayload(result)
 		})
 
+	api.ClaTemplatesGetCLATemplateHandler = cla_templates.GetCLATemplateHandlerFunc(
+		func(params cla_templates.GetCLATemplateParams, user *auth.User) middleware.Responder {
+			result, err := service.GetCLATemplate(&params)
+			if err != nil {
+				if err == ErrClaTemplateNotFound {
+					return cla_templates.NewGetCLATemplateNotFound().WithPayload(&models.ErrorResponse{
+						Code:    strconv.Itoa(cla_templates.DeleteCLATemplateNotFoundCode),
+						Message: err.Error(),
+					})
+				}
+				return cla_templates.NewGetCLATemplateBadRequest().WithPayload(errorResponse(err))
+			}
+			return cla_templates.NewGetCLATemplateOK().WithPayload(result)
+		})
+
 	api.ClaTemplatesDeleteCLATemplateHandler = cla_templates.DeleteCLATemplateHandlerFunc(
 		func(params cla_templates.DeleteCLATemplateParams, user *auth.User) middleware.Responder {
 			err := service.DeleteCLATemplate(&params)

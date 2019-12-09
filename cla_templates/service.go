@@ -10,7 +10,7 @@ type Service interface {
 	CreateCLATemplate(in *params.CreateCLATemplateParams) (*models.ClaTemplate, error)
 	//UpdateCLATemplate(in *params.UpdateCLATemplateParams) (*models.ClaTemplate, error)
 	DeleteCLATemplate(in *params.DeleteCLATemplateParams) error
-	//GetCLATemplate(in *params.GetCLATemplateParams) (*models.ClaTemplate, error)
+	GetCLATemplate(in *params.GetCLATemplateParams) (*models.ClaTemplate, error)
 	//ListCLATemplate(in *params.ListCLATemplatesParams) (*models.ClaTemplateList, error)
 }
 
@@ -25,6 +25,10 @@ func NewService(repo Repository) Service {
 
 func (s *service) CreateCLATemplate(in *params.CreateCLATemplateParams) (*models.ClaTemplate, error) {
 	return s.repo.CreateCLATemplate(in.ClaTemplate)
+}
+
+func (s *service) GetCLATemplate(in *params.GetCLATemplateParams) (*models.ClaTemplate, error) {
+	return s.repo.GetCLATemplate(in.ClaTemplateID)
 }
 
 func (s *service) DeleteCLATemplate(in *params.DeleteCLATemplateParams) error {

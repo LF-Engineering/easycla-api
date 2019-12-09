@@ -483,7 +483,9 @@ paths:
         - application/json
       responses:
         '200':
-          $ref: '#/definitions/cla_template'
+          description: Success
+          schema:
+            $ref: '#/definitions/cla_template'
         '400':
           $ref: '#/responses/invalid-request'
         '401':

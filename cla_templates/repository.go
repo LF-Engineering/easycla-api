@@ -15,13 +15,18 @@ const (
 	CLATemplatesTable = "cla.cla_templates"
 )
 
+const (
+	NoResultErrorString = "sql: no rows in result set"
+)
+
 var (
 	ErrClaTemplateNotFound = errors.New("cla template does not exist")
 )
 
-// Repository interface defines methods of event repository service
+// Repository interface defines methods of cla_templates repository service
 type Repository interface {
 	CreateCLATemplate(template *models.ClaTemplateInput) (*models.ClaTemplate, error)
+	GetCLATemplate(claTemplateID string) (*models.ClaTemplate, error)
 	DeleteCLATemplate(claTemplateID string) error
 }
 
@@ -112,4 +117,19 @@ func (r *repository) DeleteCLATemplate(claTemplateID string) error {
 		return ErrClaTemplateNotFound
 	}
 	return nil
+}
+
+func (r *repository) GetCLATemplate(claTemplateID string) (*models.ClaTemplate, error) {
+	var template SQLCLATemplate
+	err := sqlz.Newx(r.GetDB()).
+		Select("*").
+		From(CLATemplatesTable).
+		Where(sqlz.Eq("id", claTemplateID)).GetRow(&template)
+	if err != nil {
+		if err.Error() == NoResultErrorString {
+			return nil, ErrClaTemplateNotFound
+		}
+		return nil, err
+	}
+	return template.toClaTemplate()
 }
