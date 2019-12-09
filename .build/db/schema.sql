@@ -74,6 +74,25 @@ CREATE TABLE cla.cla_groups (
 
 
 --
+-- Name: cla_templates; Type: TABLE; Schema: cla; Owner: -
+--
+
+CREATE TABLE cla.cla_templates (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    name character varying(255) NOT NULL,
+    description text NOT NULL,
+    created_at bigint DEFAULT date_part('epoch'::text, now()) NOT NULL,
+    updated_at bigint DEFAULT date_part('epoch'::text, now()) NOT NULL,
+    version integer NOT NULL,
+    icla_html_body bytea,
+    ccla_html_body bytea,
+    meta_fields jsonb,
+    icla_fields jsonb,
+    ccla_fields jsonb
+);
+
+
+--
 -- Name: events; Type: TABLE; Schema: cla; Owner: -
 --
 
@@ -122,6 +141,14 @@ ALTER TABLE ONLY cla.cla_groups
 
 
 --
+-- Name: cla_templates cla_templates_pkey; Type: CONSTRAINT; Schema: cla; Owner: -
+--
+
+ALTER TABLE ONLY cla.cla_templates
+    ADD CONSTRAINT cla_templates_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: events events_pkey; Type: CONSTRAINT; Schema: cla; Owner: -
 --
 
@@ -156,4 +183,5 @@ ALTER TABLE ONLY cla.cla_group_project_managers
 
 INSERT INTO public.schema_migrations (version) VALUES
     ('20191112093719'),
-    ('20191118083102');
+    ('20191118083102'),
+    ('20191209091738');
