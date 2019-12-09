@@ -2,6 +2,7 @@ package cla_templates
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/ido50/sqlz"
 
@@ -14,9 +15,14 @@ const (
 	CLATemplatesTable = "cla.cla_templates"
 )
 
+var (
+	ErrClaTemplateNotFound = errors.New("cla template does not exist")
+)
+
 // Repository interface defines methods of event repository service
 type Repository interface {
 	CreateCLATemplate(template *models.ClaTemplateInput) (*models.ClaTemplate, error)
+	DeleteCLATemplate(claTemplateID string) error
 }
 
 type repository struct {
@@ -88,4 +94,22 @@ func (r *repository) CreateCLATemplate(in *models.ClaTemplateInput) (*models.Cla
 		Name:         in.Name,
 		UpdatedAt:    result.CreatedAt.Int64,
 	}, nil
+}
+
+func (r *repository) DeleteCLATemplate(claTemplateID string) error {
+	res, err := sqlz.Newx(r.GetDB()).
+		DeleteFrom(CLATemplatesTable).
+		Where(sqlz.Eq("id", claTemplateID)).
+		Exec()
+	if err != nil {
+		return err
+	}
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if rowsAffected == 0 {
+		return ErrClaTemplateNotFound
+	}
+	return nil
 }

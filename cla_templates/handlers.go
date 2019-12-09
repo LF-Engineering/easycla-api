@@ -1,6 +1,8 @@
 package cla_templates
 
 import (
+	"strconv"
+
 	"github.com/LF-Engineering/lfx-kit/auth"
 	"github.com/communitybridge/easycla-api/gen/models"
 	"github.com/communitybridge/easycla-api/gen/restapi/operations"
@@ -17,6 +19,21 @@ func Configure(api *operations.ClaAPI, service Service) {
 				return cla_templates.NewCreateCLATemplateBadRequest().WithPayload(errorResponse(err))
 			}
 			return cla_templates.NewCreateCLATemplateCreated().WithPayload(result)
+		})
+
+	api.ClaTemplatesDeleteCLATemplateHandler = cla_templates.DeleteCLATemplateHandlerFunc(
+		func(params cla_templates.DeleteCLATemplateParams, user *auth.User) middleware.Responder {
+			err := service.DeleteCLATemplate(&params)
+			if err != nil {
+				if err == ErrClaTemplateNotFound {
+					return cla_templates.NewDeleteCLATemplateNotFound().WithPayload(&models.ErrorResponse{
+						Code:    strconv.Itoa(cla_templates.DeleteCLATemplateNotFoundCode),
+						Message: err.Error(),
+					})
+				}
+				return cla_templates.NewDeleteCLATemplateBadRequest().WithPayload(errorResponse(err))
+			}
+			return cla_templates.NewDeleteCLATemplateOK()
 		})
 }
 
