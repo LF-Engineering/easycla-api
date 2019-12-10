@@ -34,6 +34,7 @@ func (t *SQLCLATemplate) toClaTemplate() (*models.ClaTemplate, error) {
 		ID:           t.ID.String,
 		Name:         t.Name.String,
 		UpdatedAt:    t.UpdatedAt.Int64,
+		Version:      t.Version.Int64,
 	}
 	if t.MetaFields.Valid {
 		err := json.Unmarshal([]byte(t.MetaFields.String), &template.MetaFields)

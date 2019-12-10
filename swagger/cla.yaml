@@ -864,6 +864,8 @@ definitions:
         type: string
       description:
         type: string
+      version:
+        type: integer
       icla_html_body:
         type: string
       created_at:
