@@ -74,14 +74,6 @@ func countOfTemplatesInDB() int64 {
 	return count
 }
 
-func newInt64(v int64) *int64 {
-	return &v
-}
-
-func newString(v string) *string {
-	return &v
-}
-
 var (
 	template1 = testTemplateList.ClaTemplates[0]
 	template2 = testTemplateList.ClaTemplates[1]

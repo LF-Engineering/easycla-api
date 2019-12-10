@@ -11,16 +11,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// CLATemplatesTable is the name of events table in database
 const (
+	// CLATemplatesTable is the name of events table in database
 	CLATemplatesTable = "cla.cla_templates"
-)
-
-const (
+	// NoResultErrorString in error return by sql when it does not get any result
 	NoResultErrorString = "sql: no rows in result set"
 )
 
 var (
+	// ErrClaTemplateNotFound is error returned when requested cla template does not exist in system
 	ErrClaTemplateNotFound = errors.New("cla template does not exist")
 )
 
@@ -62,25 +61,25 @@ func (r *repository) CreateCLATemplate(in *models.ClaTemplateInput) (*models.Cla
 		values["ccla_html_body"] = in.CclaHTMLBody
 	}
 	if len(in.MetaFields) != 0 {
-		metaFieldJson, err := json.Marshal(in.MetaFields)
+		metaFieldJSON, err := json.Marshal(in.MetaFields)
 		if err != nil {
 			return nil, err
 		}
-		values["meta_fields"] = metaFieldJson
+		values["meta_fields"] = metaFieldJSON
 	}
 	if len(in.IclaFields) != 0 {
-		iclaFieldJson, err := json.Marshal(in.IclaFields)
+		iclaFieldJSON, err := json.Marshal(in.IclaFields)
 		if err != nil {
 			return nil, err
 		}
-		values["icla_fields"] = iclaFieldJson
+		values["icla_fields"] = iclaFieldJSON
 	}
 	if len(in.CclaFields) != 0 {
-		cclaFieldJson, err := json.Marshal(in.CclaFields)
+		cclaFieldJSON, err := json.Marshal(in.CclaFields)
 		if err != nil {
 			return nil, err
 		}
-		values["ccla_fields"] = cclaFieldJson
+		values["ccla_fields"] = cclaFieldJSON
 	}
 	stmt := sqlz.Newx(r.GetDB()).
 		InsertInto(CLATemplatesTable).
@@ -151,29 +150,29 @@ func (r *repository) UpdateCLATemplate(claTemplateID string, in *models.ClaTempl
 		values["ccla_html_body"] = in.CclaHTMLBody
 	}
 	if len(in.MetaFields) != 0 {
-		metaFieldJson, err := json.Marshal(in.MetaFields)
+		metaFieldJSON, err := json.Marshal(in.MetaFields)
 		if err != nil {
 			return nil, err
 		}
-		values["meta_fields"] = metaFieldJson
+		values["meta_fields"] = metaFieldJSON
 	} else {
 		values["meta_fields"] = nil
 	}
 	if len(in.IclaFields) != 0 {
-		iclaFieldJson, err := json.Marshal(in.IclaFields)
+		iclaFieldJSON, err := json.Marshal(in.IclaFields)
 		if err != nil {
 			return nil, err
 		}
-		values["icla_fields"] = iclaFieldJson
+		values["icla_fields"] = iclaFieldJSON
 	} else {
 		values["icla_fields"] = nil
 	}
 	if len(in.CclaFields) != 0 {
-		cclaFieldJson, err := json.Marshal(in.CclaFields)
+		cclaFieldJSON, err := json.Marshal(in.CclaFields)
 		if err != nil {
 			return nil, err
 		}
-		values["ccla_fields"] = cclaFieldJson
+		values["ccla_fields"] = cclaFieldJSON
 	} else {
 		values["ccla_fields"] = nil
 	}

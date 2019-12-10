@@ -15,8 +15,8 @@ type SQLCLATemplate struct {
 	Name         sql.NullString `db:"name"`
 	Description  sql.NullString `db:"description"`
 	Version      sql.NullInt64  `db:"version"`
-	IclaHtmlBody sql.NullString `db:"icla_html_body"`
-	CclaHtmlBody sql.NullString `db:"ccla_html_body"`
+	IclaHTMLBody sql.NullString `db:"icla_html_body"`
+	CclaHTMLBody sql.NullString `db:"ccla_html_body"`
 	MetaFields   sql.NullString `db:"meta_fields"`
 	IclaFields   sql.NullString `db:"icla_fields"`
 	CclaFields   sql.NullString `db:"ccla_fields"`
@@ -27,10 +27,10 @@ func (t *SQLCLATemplate) toClaTemplate() (*models.ClaTemplate, error) {
 		CclaFields:   nil,
 		IclaFields:   nil,
 		MetaFields:   nil,
-		CclaHTMLBody: t.CclaHtmlBody.String,
+		CclaHTMLBody: t.CclaHTMLBody.String,
 		CreatedAt:    t.CreatedAt.Int64,
 		Description:  t.Description.String,
-		IclaHTMLBody: t.IclaHtmlBody.String,
+		IclaHTMLBody: t.IclaHTMLBody.String,
 		ID:           t.ID.String,
 		Name:         t.Name.String,
 		UpdatedAt:    t.UpdatedAt.Int64,
