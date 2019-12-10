@@ -101,6 +101,7 @@ func (r *repository) CreateCLATemplate(in *models.ClaTemplateInput) (*models.Cla
 		MetaFields:   in.MetaFields,
 		Name:         in.Name,
 		UpdatedAt:    result.CreatedAt.Int64,
+		Version:      1,
 	}, nil
 }
 
