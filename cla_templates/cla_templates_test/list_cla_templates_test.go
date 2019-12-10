@@ -12,30 +12,32 @@ import (
 
 func TestListCLATemplates(t *testing.T) {
 	prepareTestDatabase()
-	// when templates are present
-	res, err := claTemplatesService.ListCLATemplate(&params.ListCLATemplatesParams{})
-	if !assert.Nil(t, err) {
-		return
-	}
-	if !assert.NotNil(t, res) {
-		return
-	}
-	if !assert.Equal(t, 2, len(res.ClaTemplates)) {
-		return
-	}
-	if !assert.Equal(t, &models.ClaTemplateList{ClaTemplates: []*models.ClaTemplate{template1, template2}}, res) {
-		return
-	}
-	// when there are no templates
-	clearTemplatesTable()
-	res, err = claTemplatesService.ListCLATemplate(&params.ListCLATemplatesParams{})
-	if !assert.Nil(t, err) {
-		return
-	}
-	if !assert.NotNil(t, res) {
-		return
-	}
-	if !assert.Equal(t, 0, len(res.ClaTemplates)) {
-		return
-	}
+	t.Run("templates are present", func(t *testing.T) {
+		res, err := claTemplatesService.ListCLATemplate(&params.ListCLATemplatesParams{})
+		if !assert.Nil(t, err) {
+			return
+		}
+		if !assert.NotNil(t, res) {
+			return
+		}
+		if !assert.Equal(t, 2, len(res.ClaTemplates)) {
+			return
+		}
+		if !assert.Equal(t, &models.ClaTemplateList{ClaTemplates: []*models.ClaTemplate{template1, template2}}, res) {
+			return
+		}
+	})
+	t.Run("templates are not present", func(t *testing.T) {
+		clearTemplatesTable()
+		res, err := claTemplatesService.ListCLATemplate(&params.ListCLATemplatesParams{})
+		if !assert.Nil(t, err) {
+			return
+		}
+		if !assert.NotNil(t, res) {
+			return
+		}
+		if !assert.Equal(t, 0, len(res.ClaTemplates)) {
+			return
+		}
+	})
 }
