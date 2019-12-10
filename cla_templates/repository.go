@@ -3,6 +3,7 @@ package cla_templates
 import (
 	"encoding/json"
 	"errors"
+	"time"
 
 	"github.com/ido50/sqlz"
 
@@ -27,6 +28,7 @@ var (
 type Repository interface {
 	CreateCLATemplate(template *models.ClaTemplateInput) (*models.ClaTemplate, error)
 	GetCLATemplate(claTemplateID string) (*models.ClaTemplate, error)
+	UpdateCLATemplate(claTemplateID string, template *models.ClaTemplateInput) (*models.ClaTemplate, error)
 	DeleteCLATemplate(claTemplateID string) error
 	ListCLATemplates() (*models.ClaTemplateList, error)
 }
@@ -133,6 +135,64 @@ func (r *repository) GetCLATemplate(claTemplateID string) (*models.ClaTemplate, 
 		return nil, err
 	}
 	return template.toClaTemplate()
+}
+
+func (r *repository) UpdateCLATemplate(claTemplateID string, in *models.ClaTemplateInput) (*models.ClaTemplate, error) {
+	values := map[string]interface{}{
+		"name":        in.Name,
+		"description": in.Description,
+		"updated_at":  time.Now().Unix(),
+	}
+	if in.IclaHTMLBody != "" {
+		values["icla_html_body"] = in.IclaHTMLBody
+	}
+	if in.CclaHTMLBody != "" {
+		values["ccla_html_body"] = in.CclaHTMLBody
+	}
+	if len(in.MetaFields) != 0 {
+		metaFieldJson, err := json.Marshal(in.MetaFields)
+		if err != nil {
+			return nil, err
+		}
+		values["meta_fields"] = metaFieldJson
+	} else {
+		values["meta_fields"] = nil
+	}
+	if len(in.IclaFields) != 0 {
+		iclaFieldJson, err := json.Marshal(in.IclaFields)
+		if err != nil {
+			return nil, err
+		}
+		values["icla_fields"] = iclaFieldJson
+	} else {
+		values["icla_fields"] = nil
+	}
+	if len(in.CclaFields) != 0 {
+		cclaFieldJson, err := json.Marshal(in.CclaFields)
+		if err != nil {
+			return nil, err
+		}
+		values["ccla_fields"] = cclaFieldJson
+	} else {
+		values["ccla_fields"] = nil
+	}
+	res, err := sqlz.Newx(r.GetDB()).
+		Update(CLATemplatesTable).
+		SetMap(values).
+		Set("version", sqlz.Indirect("version + 1")).
+		Where(sqlz.Eq("id", claTemplateID)).
+		Exec()
+	if err != nil {
+		return nil, err
+	}
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return nil, err
+	}
+	if rowsAffected == 0 {
+		return nil, ErrClaTemplateNotFound
+	}
+	return r.GetCLATemplate(claTemplateID)
 }
 
 func (r *repository) ListCLATemplates() (*models.ClaTemplateList, error) {

@@ -14,6 +14,9 @@ import (
 func Configure(api *operations.ClaAPI, service Service) {
 	api.ClaTemplatesCreateCLATemplateHandler = cla_templates.CreateCLATemplateHandlerFunc(
 		func(params cla_templates.CreateCLATemplateParams, user *auth.User) middleware.Responder {
+			if !(user.Admin || user.IsUserAuthorizedForAll(auth.Project)) {
+				return cla_templates.NewCreateCLATemplateUnauthorized()
+			}
 			result, err := service.CreateCLATemplate(&params)
 			if err != nil {
 				return cla_templates.NewCreateCLATemplateBadRequest().WithPayload(errorResponse(err))
@@ -23,6 +26,9 @@ func Configure(api *operations.ClaAPI, service Service) {
 
 	api.ClaTemplatesGetCLATemplateHandler = cla_templates.GetCLATemplateHandlerFunc(
 		func(params cla_templates.GetCLATemplateParams, user *auth.User) middleware.Responder {
+			if len(user.ResourceIDsByType(auth.Project)) == 0 {
+				return cla_templates.NewGetCLATemplateUnauthorized()
+			}
 			result, err := service.GetCLATemplate(&params)
 			if err != nil {
 				if err == ErrClaTemplateNotFound {
@@ -36,8 +42,29 @@ func Configure(api *operations.ClaAPI, service Service) {
 			return cla_templates.NewGetCLATemplateOK().WithPayload(result)
 		})
 
+	api.ClaTemplatesUpdateCLATemplateHandler = cla_templates.UpdateCLATemplateHandlerFunc(
+		func(params cla_templates.UpdateCLATemplateParams, user *auth.User) middleware.Responder {
+			if !(user.Admin || user.IsUserAuthorizedForAll(auth.Project)) {
+				return cla_templates.NewUpdateCLATemplateUnauthorized()
+			}
+			result, err := service.UpdateCLATemplate(&params)
+			if err != nil {
+				if err == ErrClaTemplateNotFound {
+					return cla_templates.NewUpdateCLATemplateNotFound().WithPayload(&models.ErrorResponse{
+						Code:    strconv.Itoa(cla_templates.DeleteCLATemplateNotFoundCode),
+						Message: err.Error(),
+					})
+				}
+				return cla_templates.NewUpdateCLATemplateBadRequest().WithPayload(errorResponse(err))
+			}
+			return cla_templates.NewUpdateCLATemplateOK().WithPayload(result)
+		})
+
 	api.ClaTemplatesDeleteCLATemplateHandler = cla_templates.DeleteCLATemplateHandlerFunc(
 		func(params cla_templates.DeleteCLATemplateParams, user *auth.User) middleware.Responder {
+			if !(user.Admin || user.IsUserAuthorizedForAll(auth.Project)) {
+				return cla_templates.NewDeleteCLATemplateUnauthorized()
+			}
 			err := service.DeleteCLATemplate(&params)
 			if err != nil {
 				if err == ErrClaTemplateNotFound {
@@ -53,6 +80,9 @@ func Configure(api *operations.ClaAPI, service Service) {
 
 	api.ClaTemplatesListCLATemplatesHandler = cla_templates.ListCLATemplatesHandlerFunc(
 		func(params cla_templates.ListCLATemplatesParams, user *auth.User) middleware.Responder {
+			if len(user.ResourceIDsByType(auth.Project)) == 0 {
+				return cla_templates.NewListCLATemplatesUnauthorized()
+			}
 			result, err := service.ListCLATemplate(&params)
 			if err != nil {
 				return cla_templates.NewListCLATemplatesBadRequest().WithPayload(errorResponse(err))
