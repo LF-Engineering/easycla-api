@@ -199,6 +199,7 @@ func (r *repository) ListCLATemplates() (*models.ClaTemplateList, error) {
 	rows, err := sqlz.Newx(r.GetDB()).
 		Select("*").
 		From(CLATemplatesTable).
+		OrderBy(sqlz.Asc("name")).
 		GetAllAsRows()
 	if err != nil {
 		return nil, err
