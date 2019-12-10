@@ -28,6 +28,7 @@ type Repository interface {
 	CreateCLATemplate(template *models.ClaTemplateInput) (*models.ClaTemplate, error)
 	GetCLATemplate(claTemplateID string) (*models.ClaTemplate, error)
 	DeleteCLATemplate(claTemplateID string) error
+	ListCLATemplates() (*models.ClaTemplateList, error)
 }
 
 type repository struct {
@@ -132,4 +133,30 @@ func (r *repository) GetCLATemplate(claTemplateID string) (*models.ClaTemplate, 
 		return nil, err
 	}
 	return template.toClaTemplate()
+}
+
+func (r *repository) ListCLATemplates() (*models.ClaTemplateList, error) {
+	rows, err := sqlz.Newx(r.GetDB()).
+		Select("*").
+		From(CLATemplatesTable).
+		GetAllAsRows()
+	if err != nil {
+		return nil, err
+	}
+	var result models.ClaTemplateList
+	result.ClaTemplates = make([]*models.ClaTemplate, 0)
+	defer rows.Close()
+	for rows.Next() {
+		var t SQLCLATemplate
+		err = rows.StructScan(&t)
+		if err != nil {
+			return nil, err
+		}
+		template, err := t.toClaTemplate()
+		if err != nil {
+			return nil, err
+		}
+		result.ClaTemplates = append(result.ClaTemplates, template)
+	}
+	return &result, nil
 }

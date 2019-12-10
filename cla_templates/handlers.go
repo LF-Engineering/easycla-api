@@ -50,6 +50,15 @@ func Configure(api *operations.ClaAPI, service Service) {
 			}
 			return cla_templates.NewDeleteCLATemplateOK()
 		})
+
+	api.ClaTemplatesListCLATemplatesHandler = cla_templates.ListCLATemplatesHandlerFunc(
+		func(params cla_templates.ListCLATemplatesParams, user *auth.User) middleware.Responder {
+			result, err := service.ListCLATemplate(&params)
+			if err != nil {
+				return cla_templates.NewListCLATemplatesBadRequest().WithPayload(errorResponse(err))
+			}
+			return cla_templates.NewListCLATemplatesOK().WithPayload(result)
+		})
 }
 
 type codedResponse interface {

@@ -11,7 +11,7 @@ type Service interface {
 	//UpdateCLATemplate(in *params.UpdateCLATemplateParams) (*models.ClaTemplate, error)
 	DeleteCLATemplate(in *params.DeleteCLATemplateParams) error
 	GetCLATemplate(in *params.GetCLATemplateParams) (*models.ClaTemplate, error)
-	//ListCLATemplate(in *params.ListCLATemplatesParams) (*models.ClaTemplateList, error)
+	ListCLATemplate(in *params.ListCLATemplatesParams) (*models.ClaTemplateList, error)
 }
 
 type service struct {
@@ -33,4 +33,8 @@ func (s *service) GetCLATemplate(in *params.GetCLATemplateParams) (*models.ClaTe
 
 func (s *service) DeleteCLATemplate(in *params.DeleteCLATemplateParams) error {
 	return s.repo.DeleteCLATemplate(in.ClaTemplateID)
+}
+
+func (s *service) ListCLATemplate(in *params.ListCLATemplatesParams) (*models.ClaTemplateList, error) {
+	return s.repo.ListCLATemplates()
 }
