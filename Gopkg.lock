@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  digest = "1:3823fbd830a6b50238644e78b1bf79fba79e9e0ee9ed34fd551aa41e64f1d1b0"
+  digest = "1:de9a0c4efb412246bfc6dab43b7d95da8909d3f9bcef63f0401859598389b0d9"
   name = "github.com/LF-Engineering/lfx-kit"
   packages = ["auth"]
   pruneopts = "UT"
-  revision = "542a850d9bb490a492abf2d42703caa9d45de637"
-  version = "v0.1.4"
+  revision = "b6129ed8d2369a413bf88711b2943be1529f34fe"
+  version = "v0.1.5"
 
 [[projects]]
   digest = "1:a2682518d905d662d984ef9959984ef87cecb777d379bfa9d9fe40e78069b3e4"

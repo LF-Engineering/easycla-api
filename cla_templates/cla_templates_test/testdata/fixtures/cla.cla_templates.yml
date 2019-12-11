@@ -1,0 +1,30 @@
+- ccla_fields: '[{"id": "sign", "name": "Please Sign", "offset_x": 100, "offset_y":
+    -6, "field_type": "sign", "anchor_string": "Please sign:"}]'
+  ccla_html_body: '<html><body><p>CCLA Project Name: {{ PROJECT_NAME }}</p></body></html>'
+  created_at: 1575971771
+  description: For use of projects under the Apache style of CLA.
+  icla_fields: '[{"id": "full_name", "name": "Full Name", "width": 340, "height":
+    20, "offset_x": 65, "offset_y": -8, "field_type": "text_unlocked", "anchor_string":
+    "Full name:"}]'
+  icla_html_body: '<html><body><p>ICLA Project Name: {{ PROJECT_NAME }}</br></p></body></html>'
+  id: 132c332e-66ff-4361-9833-594344a072bf
+  meta_fields: '[{"name": "Project Name", "description": "Project''s Full Name.",
+    "template_variable": "PROJECT_NAME"}]'
+  name: Apache Style
+  updated_at: 1575971771
+  version: 1
+- ccla_fields: '[{"id": "date", "name": "Date", "offset_x": 40, "offset_y": -7, "field_type":
+    "date", "anchor_string": "Date:"}]'
+  ccla_html_body: '<html><body><p>CCLA Project Name: {{ PROJECT_NAME }}</p></body></html>'
+  created_at: 1575972053
+  description: For use of projects under the LF style of CLA.
+  icla_fields: '[{"id": "mailing_address1", "name": "Mailing Address", "width": 300,
+    "height": 20, "offset_x": 105, "offset_y": -7, "field_type": "text_unlocked",
+    "anchor_string": "Mailing Address:"}]'
+  icla_html_body: '<html><body><p>ICLA Project Name: {{ PROJECT_NAME }}</br></p></body></html>'
+  id: 03405605-6b1b-4ece-a280-f97e4d91fea8
+  meta_fields: '[{"name": "Project Name", "description": "Project''s Full Name.",
+    "template_variable": "PROJECT_NAME"}]'
+  name: LF Style
+  updated_at: 1575972094
+  version: 2
