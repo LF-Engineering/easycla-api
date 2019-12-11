@@ -57,9 +57,9 @@ dbmate:
 clean:
 	rm -rf ./gen ./bin
 
-swagger: clean deps
+swagger: clean
 	mkdir gen
-	swagger -q generate server -t gen -f swagger/cla.yaml --exclude-main -A cla -P auth.User
+	swagger -q generate server -t gen -f swagger/cla.yaml --exclude-main -A cla -P auth.User --existing-models "github.com/LF-Engineering/lfx-kit/auth"
 
 swagger-validate:
 	swagger validate swagger/cla.yaml
