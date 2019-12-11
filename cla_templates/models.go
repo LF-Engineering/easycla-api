@@ -24,9 +24,9 @@ type SQLCLATemplate struct {
 
 func (t *SQLCLATemplate) toClaTemplate() (*models.ClaTemplate, error) {
 	template := &models.ClaTemplate{
-		CclaFields:   nil,
-		IclaFields:   nil,
-		MetaFields:   nil,
+		CclaFields:   make([]*models.Field, 0),
+		IclaFields:   make([]*models.Field, 0),
+		MetaFields:   make([]*models.MetaField, 0),
 		CclaHTMLBody: t.CclaHTMLBody.String,
 		CreatedAt:    t.CreatedAt.Int64,
 		Description:  t.Description.String,

@@ -89,19 +89,7 @@ func (r *repository) CreateCLATemplate(in *models.ClaTemplateInput) (*models.Cla
 	if err != nil {
 		return nil, err
 	}
-	return &models.ClaTemplate{
-		CclaFields:   in.CclaFields,
-		CclaHTMLBody: in.CclaHTMLBody,
-		CreatedAt:    result.CreatedAt.Int64,
-		Description:  in.Description,
-		IclaFields:   in.IclaFields,
-		IclaHTMLBody: in.IclaHTMLBody,
-		ID:           result.ID.String,
-		MetaFields:   in.MetaFields,
-		Name:         in.Name,
-		UpdatedAt:    result.CreatedAt.Int64,
-		Version:      1,
-	}, nil
+	return r.GetCLATemplate(result.ID.String)
 }
 
 func (r *repository) DeleteCLATemplate(claTemplateID string) error {
