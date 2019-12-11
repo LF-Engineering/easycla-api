@@ -345,6 +345,158 @@ paths:
       tags:
         - cla-groups
 
+  /cla_templates:
+    get:
+      summary: list CLA templates
+      description: List CLA templates
+      operationId: listCLATemplates
+      parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/cla_template_list'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+      tags:
+        - cla-templates
+    post:
+      summary: create CLA template
+      description: Creates CLA template
+      operationId: createCLATemplate
+      parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
+        - in: body
+          description: CLA template to create
+          name: cla_template
+          schema:
+            $ref: '#/definitions/cla_template_input'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Success
+          schema:
+            $ref: '#/definitions/cla_template'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+      tags:
+        - cla-templates
+
+  /cla_templates/{cla_template_id}:
+    put:
+      summary: update CLA template
+      description: update CLA template
+      operationId: updateCLATemplate
+      parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
+        - in: path
+          description: ID of the CLA template to update
+          name: cla_template_id
+          type: string
+          required: true
+        - in: body
+          description: CLA template to update
+          name: cla_template
+          schema:
+            $ref: '#/definitions/cla_template_input'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/cla_template'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+      tags:
+        - cla-templates
+    delete:
+      summary: delete the CLA template
+      description: delete the CLA template
+      operationId: deleteCLATemplate
+      parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
+        - in: path
+          description: ID of the CLA template to delete
+          name: cla_template_id
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+      tags:
+        - cla-templates
+    get:
+      summary: get the CLA template
+      description: get the CLA template
+      operationId: getCLATemplate
+      parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
+        - in: path
+          description: ID of the CLA template to get
+          name: cla_template_id
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/cla_template'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+      tags:
+        - cla-templates
+
 definitions:
   health:
     type: object
@@ -481,7 +633,7 @@ definitions:
       templates:
         type: array
         items:
-          $ref: '#/definitions/cla_template'
+          $ref: '#/definitions/cla_template_in_project'
       ccla_enabled:
         type: boolean
       icla_enabled:
@@ -495,7 +647,7 @@ definitions:
       whitelist:
         $ref: '#/definitions/whitelist'
 
-  cla_template:
+  cla_template_in_project:
     type: object
     properties:
       type:
@@ -691,6 +843,116 @@ definitions:
         items:
           type: string
           format: uuid
+
+  cla_template_list:
+    type: object
+    properties:
+      cla_templates:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/cla_template'
+
+  cla_template:
+    type: object
+    title: cla_template
+    description: CLA Template
+    properties:
+      name:
+        type: string
+      id:
+        type: string
+      description:
+        type: string
+      version:
+        type: integer
+      icla_html_body:
+        type: string
+      created_at:
+        type: integer
+      updated_at:
+        type: integer
+      ccla_html_body:
+        type: string
+      meta_fields:
+        type: array
+        items:
+          $ref: '#/definitions/meta_field'
+      icla_fields:
+        type: array
+        items:
+          $ref: '#/definitions/field'
+      ccla_fields:
+        type: array
+        items:
+          $ref: '#/definitions/field'
+
+  cla_template_input:
+    type: object
+    title: cla_template_input
+    description: CLA Template to create/update
+    required:
+      - name
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      icla_html_body:
+        type: string
+      ccla_html_body:
+        type: string
+      meta_fields:
+        type: array
+        items:
+          $ref: '#/definitions/meta_field'
+      icla_fields:
+        type: array
+        items:
+          $ref: '#/definitions/field'
+      ccla_fields:
+        type: array
+        items:
+          $ref: '#/definitions/field'
+
+  meta_field:
+    title: meta_field
+    type: object
+    properties:
+      name:
+        type: string
+      value:
+        type: string
+      description:
+        type: string
+      template_variable:
+        type: string
+
+  field:
+    title: field
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      anchor_string:
+        type: string
+      field_type:
+        type: string
+      is_optional:
+        type: boolean
+      is_editable:
+        type: boolean
+      width:
+        type: integer
+      height:
+        type: integer
+      offset_x:
+        type: integer
+      offset_y:
+        type: integer
+
 
 responses:
   unauthorized:
