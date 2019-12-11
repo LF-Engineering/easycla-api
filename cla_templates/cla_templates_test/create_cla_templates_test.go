@@ -25,7 +25,7 @@ func TestCreateCLATemplate(t *testing.T) {
 				IclaFields:   template1.IclaFields,
 				IclaHTMLBody: template1.IclaHTMLBody,
 				MetaFields:   template1.MetaFields,
-				Name:         template1.Name,
+				Name:         &template1.Name,
 			},
 		})
 		if !assert.Nil(t, err, "err should be nil") {

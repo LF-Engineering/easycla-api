@@ -38,7 +38,7 @@ func TestUpdateCLATemplate(t *testing.T) {
 				IclaFields:   template2.IclaFields,
 				IclaHTMLBody: template2.IclaHTMLBody,
 				MetaFields:   template2.MetaFields,
-				Name:         template2.Name,
+				Name:         &template2.Name,
 			},
 		})
 		if !assert.Nil(t, err, "error should be nil") {
