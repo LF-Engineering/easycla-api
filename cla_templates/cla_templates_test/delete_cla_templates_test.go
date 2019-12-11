@@ -39,7 +39,7 @@ func TestDeleteCLATemplate(t *testing.T) {
 			}
 			if err == nil {
 				currentCount := countOfTemplatesInDB()
-				if !assert.Equal(t, previousCount-1, currentCount) {
+				if !assert.Equal(t, previousCount-1, currentCount, "cla_template should be deleted") {
 					return
 				}
 			}

@@ -41,7 +41,7 @@ func TestGetCLATemplate(t *testing.T) {
 				t.Errorf("GetCLATemplate() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !assert.Equal(t, tt.want, got) {
+			if !assert.Equal(t, tt.want, got, "actual response should match with expected response") {
 				return
 			}
 		})

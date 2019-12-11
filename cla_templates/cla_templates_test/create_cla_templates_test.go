@@ -28,28 +28,31 @@ func TestCreateCLATemplate(t *testing.T) {
 				Name:         template1.Name,
 			},
 		})
-		if !assert.Nil(t, err) {
+		if !assert.Nil(t, err, "err should be nil") {
 			return
 		}
-		if !assert.NotNil(t, got) {
+		if !assert.NotNil(t, got, "response should not be nil") {
 			return
 		}
-		if !assert.Equal(t, int64(1), countOfTemplatesInDB()) {
+		if !assert.Equal(t, int64(1), countOfTemplatesInDB(), "template should be created in database") {
 			return
 		}
 		if !strfmt.IsUUID4(got.ID) {
+			t.Log("id should be of type UUID")
 			t.Fail()
 			return
 		}
 		if got.CreatedAt < timeBeforeCreation {
+			t.Log("invalid created_at time")
 			t.Fail()
 			return
 		}
 		if got.UpdatedAt < timeBeforeCreation {
+			t.Log("invalid updated_at time")
 			t.Fail()
 			return
 		}
-		if !assert.Equal(t, int64(1), got.Version) {
+		if !assert.Equal(t, int64(1), got.Version, "template version should be 1") {
 			return
 		}
 		expected := *template1
@@ -58,18 +61,18 @@ func TestCreateCLATemplate(t *testing.T) {
 		expected.ID = got.ID
 		expected.Version = 1
 
-		if !assert.Equal(t, &expected, got) {
+		if !assert.Equal(t, &expected, got, "actual response should match with expected response") {
 			return
 		}
 
 		gotTemplate, err := claTemplatesService.GetCLATemplate(&params.GetCLATemplateParams{ClaTemplateID: got.ID})
-		if !assert.Nil(t, err) {
+		if !assert.Nil(t, err, "err should be nil") {
 			return
 		}
-		if !assert.NotNil(t, gotTemplate) {
+		if !assert.NotNil(t, gotTemplate, "response should not be nil") {
 			return
 		}
-		if !assert.Equal(t, gotTemplate, got) {
+		if !assert.Equal(t, gotTemplate, got, "values in database must equal to actual response") {
 			return
 		}
 	})
