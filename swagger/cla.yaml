@@ -891,6 +891,8 @@ definitions:
     type: object
     title: cla_template_input
     description: CLA Template to create/update
+    required:
+      - name
     properties:
       name:
         type: string
