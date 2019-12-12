@@ -108,6 +108,23 @@ CREATE TABLE cla.events (
 
 
 --
+-- Name: repositories; Type: TABLE; Schema: cla; Owner: -
+--
+
+CREATE TABLE cla.repositories (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    repository_type character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    organization_name character varying(255) NOT NULL,
+    url character varying(4096) NOT NULL,
+    enabled boolean DEFAULT false NOT NULL,
+    project_id character varying(255) NOT NULL,
+    cla_group_id uuid NOT NULL,
+    created_at bigint DEFAULT date_part('epoch'::text, now()) NOT NULL
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -157,6 +174,14 @@ ALTER TABLE ONLY cla.events
 
 
 --
+-- Name: repositories repositories_pkey; Type: CONSTRAINT; Schema: cla; Owner: -
+--
+
+ALTER TABLE ONLY cla.repositories
+    ADD CONSTRAINT repositories_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -173,6 +198,14 @@ ALTER TABLE ONLY cla.cla_group_project_managers
 
 
 --
+-- Name: repositories repositories_cla_group_id_fkey; Type: FK CONSTRAINT; Schema: cla; Owner: -
+--
+
+ALTER TABLE ONLY cla.repositories
+    ADD CONSTRAINT repositories_cla_group_id_fkey FOREIGN KEY (cla_group_id) REFERENCES cla.cla_groups(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -184,4 +217,5 @@ ALTER TABLE ONLY cla.cla_group_project_managers
 INSERT INTO public.schema_migrations (version) VALUES
     ('20191112093719'),
     ('20191118083102'),
-    ('20191209091738');
+    ('20191209091738'),
+    ('20191212125542');
