@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"errors"
+
 	"github.com/ido50/sqlz"
 
 	"github.com/communitybridge/easycla-api/gen/models"
@@ -21,6 +23,12 @@ const (
 const (
 	// CLARepositoryTable is name of repositories table in database
 	CLARepositoryTable = "cla.repositories"
+	CLAGroupsTable     = "cla.cla_groups"
+)
+
+// Errors
+var (
+	ErrInvalidClgGroupAndProjectID = errors.New("given cla_group is not present for given project")
 )
 
 // Repository interface defines methods of repository service
@@ -48,6 +56,17 @@ func (r *repository) GetDB() *sqlx.DB {
 func (r *repository) CreateRepositories(in *models.CreateRepositoriesInput) (*models.RepositoryList, error) {
 	var err error
 	terr := sqlz.Newx(r.GetDB()).Transactional(func(tx *sqlz.Tx) error {
+		var count int64
+		count, err = tx.Select("*").From(CLAGroupsTable).
+			Where(sqlz.Eq("id", in.ClaGroupID)).
+			Where(sqlz.Eq("project_id", in.ProjectID)).GetCount()
+		if err != nil {
+			return err
+		}
+		if count == 0 {
+			err = ErrInvalidClgGroupAndProjectID
+			return err
+		}
 		for _, repo := range in.Repositories {
 			values := map[string]interface{}{
 				"repository_type":   repo.RepositoryType,
