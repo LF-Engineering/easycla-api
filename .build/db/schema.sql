@@ -116,8 +116,9 @@ CREATE TABLE cla.repositories (
     repository_type character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
     organization_name character varying(255) NOT NULL,
+    external_id character varying(4096) NOT NULL,
     url character varying(4096) NOT NULL,
-    enabled boolean DEFAULT false NOT NULL,
+    enabled boolean DEFAULT true NOT NULL,
     project_id character varying(255) NOT NULL,
     cla_group_id uuid NOT NULL,
     created_at bigint DEFAULT date_part('epoch'::text, now()) NOT NULL
