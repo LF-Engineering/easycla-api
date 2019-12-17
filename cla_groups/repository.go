@@ -17,6 +17,8 @@ const (
 	CLAGroupsTable = "cla.cla_groups"
 	// CLAGroupProjectManagerTable is the name of cla_group_project_managers table in database
 	CLAGroupProjectManagerTable = "cla.cla_group_project_managers"
+	// CLARepositoryTable is name of repositories table in database
+	CLARepositoryTable = "cla.repositories"
 )
 
 var (
@@ -111,6 +113,13 @@ func (r *repository) DeleteCLAGroup(claGroupID string) error {
 		var rowsAffected int64
 		_, err = tx.
 			DeleteFrom(CLAGroupProjectManagerTable).
+			Where(sqlz.Eq("cla_group_id", claGroupID)).
+			Exec()
+		if err != nil {
+			return err
+		}
+		_, err = tx.
+			DeleteFrom(CLARepositoryTable).
 			Where(sqlz.Eq("cla_group_id", claGroupID)).
 			Exec()
 		if err != nil {
