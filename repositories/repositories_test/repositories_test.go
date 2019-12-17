@@ -70,11 +70,10 @@ var (
 )
 
 var (
-	PrometheusClaGroupID  = "de1e355b-7b2c-45e2-86e0-ee6f995af44b"
-	Prometheus2ClaGroupID = "de1e355b-7b2c-45e2-86e0-ee6f995af44a"
-	PrometheusProjectID   = "0014100000Te1ERAAA"
-	KubernetesClaGroupID  = "4b65422e-b47f-4631-ab7c-47ecf6f2200c"
-	KubernetesProjectID   = "0014100000Te1ERAAZ"
+	PrometheusClaGroupID = "de1e355b-7b2c-45e2-86e0-ee6f995af44b"
+	PrometheusProjectID  = "0014100000Te1ERAAA"
+	KubernetesClaGroupID = "4b65422e-b47f-4631-ab7c-47ecf6f2200c"
+	KubernetesProjectID  = "0014100000Te1ERAAZ"
 )
 
 var testRepositories = []*models.Repository{

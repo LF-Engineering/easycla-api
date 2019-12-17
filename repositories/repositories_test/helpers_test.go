@@ -30,6 +30,15 @@ func isRepositoryPresent(repoID string) bool {
 	return count == 1
 }
 
+func deleteAllRepositories() {
+	_, err := sqlz.Newx(sqlxDB).
+		DeleteFrom(repositories.CLARepositoryTable).
+		Exec()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func numberOfRepositories() int64 {
 	count, err := sqlz.Newx(sqlxDB).
 		Select("*").
