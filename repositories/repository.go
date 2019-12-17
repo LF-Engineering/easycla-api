@@ -79,10 +79,12 @@ func (r *repository) CreateRepositories(in *models.CreateRepositoriesInput) (*mo
 				"name":              repo.Name,
 				"organization_name": repo.OrganizationName,
 				"url":               repo.URL,
-				"enabled":           repo.Enabled,
 				"project_id":        in.ProjectID,
 				"cla_group_id":      in.ClaGroupID,
 				"external_id":       repo.ExternalID,
+			}
+			if repo.Enabled != nil {
+				values["enabled"] = *repo.Enabled
 			}
 			stmt := tx.
 				InsertInto(CLARepositoryTable).
