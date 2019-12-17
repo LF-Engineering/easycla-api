@@ -23,7 +23,8 @@ const (
 const (
 	// CLARepositoryTable is name of repositories table in database
 	CLARepositoryTable = "cla.repositories"
-	CLAGroupsTable     = "cla.cla_groups"
+	// CLAGroupsTable is name of cla_groups table in database
+	CLAGroupsTable = "cla.cla_groups"
 )
 
 // Errors
@@ -55,8 +56,13 @@ func (r *repository) GetDB() *sqlx.DB {
 
 func (r *repository) CreateRepositories(in *models.CreateRepositoriesInput) (*models.RepositoryList, error) {
 	var err error
+	var ids []string
+	type returnResult struct {
+		ID string `db:"id"`
+	}
 	terr := sqlz.Newx(r.GetDB()).Transactional(func(tx *sqlz.Tx) error {
 		var count int64
+		var id returnResult
 		count, err = tx.Select("*").From(CLAGroupsTable).
 			Where(sqlz.Eq("id", in.ClaGroupID)).
 			Where(sqlz.Eq("project_id", in.ProjectID)).GetCount()
@@ -78,20 +84,21 @@ func (r *repository) CreateRepositories(in *models.CreateRepositoriesInput) (*mo
 				"cla_group_id":      in.ClaGroupID,
 				"external_id":       repo.ExternalID,
 			}
-			_, err = tx.
+			stmt := tx.
 				InsertInto(CLARepositoryTable).
-				ValueMap(values).Exec()
-			return err
+				ValueMap(values).Returning("id")
+			err = stmt.GetRow(&id)
+			if err != nil {
+				return err
+			}
+			ids = append(ids, id.ID)
 		}
 		return nil
 	})
 	if terr != nil {
 		return nil, err
 	}
-	return r.ListRepositories(&params.ListRepositoriesParams{
-		ClaGroupID: in.ClaGroupID,
-		ProjectID:  *in.ProjectID,
-	})
+	return r.getRepositories(*in.ProjectID, *in.ClaGroupID, ids)
 }
 
 func (r *repository) DeleteRepositories(in *models.DeleteRepositoriesInput) error {
@@ -160,4 +167,32 @@ func (r *repository) ListRepositories(in *params.ListRepositoriesParams) (*model
 		result.Repositories = append(result.Repositories, t.toRepository())
 	}
 	return &result, nil
+}
+
+func (r *repository) getRepositories(projectID string, claGroupID string, repositoryIDs []string) (*models.RepositoryList, error) {
+	ids := make([]interface{}, len(repositoryIDs))
+	for i, v := range repositoryIDs {
+		ids[i] = v
+	}
+	rows, err := sqlz.Newx(r.GetDB()).
+		Select("*").From(CLARepositoryTable).
+		Where(sqlz.Eq("cla_group_id", claGroupID)).
+		Where(sqlz.Eq("project_id", projectID)).
+		Where(sqlz.In("id", ids...)).GetAllAsRows()
+	if err != nil {
+		return nil, err
+	}
+	var result models.RepositoryList
+	result.Repositories = make([]*models.Repository, 0)
+	defer rows.Close()
+	for rows.Next() {
+		var t SQLRepository
+		err = rows.StructScan(&t)
+		if err != nil {
+			return nil, err
+		}
+		result.Repositories = append(result.Repositories, t.toRepository())
+	}
+	return &result, nil
+
 }

@@ -140,7 +140,7 @@ func server(localMode bool) http.Handler {
 	cla_templates.Configure(api, claTemplatesService)
 
 	repositoriesRepo := repositories.NewRepository(db)
-	repositoriesService := repositories.NewService(repositoriesRepo)
+	repositoriesService := repositories.NewService(repositoriesRepo, eventsService)
 	repositories.Configure(api, repositoriesService)
 
 	github.Init(conf)

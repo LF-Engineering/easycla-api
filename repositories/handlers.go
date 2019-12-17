@@ -17,7 +17,7 @@ func Configure(api *operations.ClaAPI, service Service) {
 			if !(user.Admin || user.IsUserAuthorizedForAll(auth.Project) || user.IsUserAuthorized(auth.Project, *params.RepositoriesInput.ProjectID)) {
 				return repositories.NewCreateRepositoriesUnauthorized()
 			}
-			result, err := service.CreateRepositories(&params)
+			result, err := service.CreateRepositories(user, &params)
 			if err != nil {
 				return repositories.NewCreateRepositoriesBadRequest().WithPayload(errorResponse(err))
 			}
@@ -28,7 +28,7 @@ func Configure(api *operations.ClaAPI, service Service) {
 			if !(user.Admin || user.IsUserAuthorizedForAll(auth.Project) || user.IsUserAuthorized(auth.Project, *params.RepositoriesInput.ProjectID)) {
 				return repositories.NewDeleteRepositoriesUnauthorized()
 			}
-			err := service.DeleteRepositories(&params)
+			err := service.DeleteRepositories(user, &params)
 			if err != nil {
 				return repositories.NewDeleteRepositoriesBadRequest().WithPayload(&models.ErrorResponse{
 					Code:    strconv.Itoa(repositories.DeleteRepositoriesBadRequestCode),
