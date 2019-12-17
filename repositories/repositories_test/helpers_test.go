@@ -3,7 +3,7 @@ package repositories_test
 import (
 	"log"
 
-	"github.com/communitybridge/easycla-api/cla_groups"
+	"github.com/communitybridge/easycla-api/repositories"
 	"github.com/ido50/sqlz"
 )
 
@@ -19,45 +19,22 @@ func newBool(b bool) *bool {
 	return &b
 }
 
-func isCLAGroupPresent(claGroupID string) bool {
+func isRepositoryPresent(repoID string) bool {
 	count, err := sqlz.Newx(sqlxDB).
 		Select("*").
-		From(cla_groups.CLAGroupsTable).
-		Where(sqlz.Eq("id", claGroupID)).GetCount()
+		From(repositories.CLARepositoryTable).
+		Where(sqlz.Eq("id", repoID)).GetCount()
 	if err != nil {
 		log.Fatal(err)
 	}
 	return count == 1
 }
 
-func numberOfCLAGroups() int64 {
+func numberOfRepositories() int64 {
 	count, err := sqlz.Newx(sqlxDB).
 		Select("*").
-		From(cla_groups.CLAGroupsTable).
+		From(repositories.CLARepositoryTable).
 		GetCount()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return count
-}
-
-func getCLAGroup(id string) (*cla_groups.SQLCLAGroups, error) {
-	var res cla_groups.SQLCLAGroups
-	err := sqlz.Newx(sqlxDB).
-		Select("*").From(cla_groups.CLAGroupsTable).
-		Where(sqlz.Eq("id", id)).
-		GetRow(&res)
-	if err != nil {
-		return nil, err
-	}
-	return &res, nil
-}
-
-func numberOfProjectManagers(claGroupID string) int64 {
-	count, err := sqlz.Newx(sqlxDB).
-		Select("*").
-		From(cla_groups.CLAGroupProjectManagerTable).
-		Where(sqlz.Eq("cla_group_id", claGroupID)).GetCount()
 	if err != nil {
 		log.Fatal(err)
 	}
