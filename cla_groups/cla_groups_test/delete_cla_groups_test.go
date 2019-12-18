@@ -12,7 +12,8 @@ import (
 )
 
 const (
-	DataloaderClaGroupID = "d9dc5834-3d9a-4d04-abb6-4a36ed378304"
+	DataloaderClaGroupID   = "d9dc5834-3d9a-4d04-abb6-4a36ed378304"
+	DataloaderRepositoryID = "ae85c1d2-1e93-4e4d-b6d5-216b1a41ff17"
 )
 
 func Test_DeleteCLAGroup(t *testing.T) {
@@ -26,6 +27,14 @@ func Test_DeleteCLAGroup(t *testing.T) {
 	}
 	if !assert.Equal(t, 2, int(numberOfProjectManagers(claGroupID)),
 		fmt.Sprintf("cla_group %s must have 2 project managers", claGroupID)) {
+		t.Fail()
+	}
+	if !assert.Equal(t, int64(2), numberOfRepositories(),
+		"total number of repositories must be 2") {
+		t.Fail()
+	}
+	if !assert.Equal(t, true, isRepositoryPresent(DataloaderRepositoryID),
+		fmt.Sprintf("repository with ID %s must be present", DataloaderRepositoryID)) {
 		t.Fail()
 	}
 	list, err := eventsService.SearchEvents(context.TODO(), &events.SearchEventsParams{})
@@ -75,6 +84,14 @@ func Test_DeleteCLAGroup(t *testing.T) {
 					t.Fail()
 				}
 				if !assert.Equal(t, 0, int(numberOfProjectManagers(tt.args.ClaGroupID))) {
+					t.Fail()
+				}
+				if !assert.Equal(t, false, isRepositoryPresent(DataloaderRepositoryID),
+					"repository associated with cla_group must be deleted") {
+					t.Fail()
+				}
+				if !assert.Equal(t, int64(1), numberOfRepositories(),
+					"other repositories must remain unaffected") {
 					t.Fail()
 				}
 				list, err := eventsService.SearchEvents(context.TODO(), &events.SearchEventsParams{})

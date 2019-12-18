@@ -59,3 +59,24 @@ func numberOfProjectManagers(claGroupID string) int64 {
 	}
 	return count
 }
+
+func isRepositoryPresent(repoID string) bool {
+	count, err := sqlz.Newx(sqlxDB).
+		Select("*").
+		From(cla_groups.CLARepositoryTable).
+		Where(sqlz.Eq("id", repoID)).GetCount()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return count == 1
+}
+func numberOfRepositories() int64 {
+	count, err := sqlz.Newx(sqlxDB).
+		Select("*").
+		From(cla_groups.CLARepositoryTable).
+		GetCount()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return count
+}

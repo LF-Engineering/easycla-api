@@ -178,7 +178,7 @@ func createListCLAGroupQuery(db *sqlx.DB, in *cla_groups.ListCLAGroupsParams) *s
 			cg.ccla_enabled,
 			cg.created_at,
 			cg.updated_at,
-			array_agg(cgm.project_manager_id) as project_managers`).
+			array_remove(array_agg(cgm.project_manager_id), NULL) as project_managers`).
 		From(CLAGroupsTable+" cg").
 		LeftJoin(CLAGroupProjectManagerTable+" cgm", sqlz.Eq("cg.id", sqlz.Indirect("cgm.cla_group_id")))
 
