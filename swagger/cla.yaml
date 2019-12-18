@@ -497,6 +497,98 @@ paths:
       tags:
         - cla-templates
 
+  /repositories:
+    post:
+      summary: create repositories
+      description: create repositories
+      operationId: createRepositories
+      parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
+        - in: body
+          description: repositories to create
+          name: repositories_input
+          schema:
+            $ref: '#/definitions/create_repositories_input'
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/repository_list'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+      tags:
+        - repositories
+    get:
+      summary: get repositories list
+      description: return list of repositores
+      operationId: listRepositories
+      parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
+        - $ref: '#/parameters/cla_group_id'
+        - $ref: '#/parameters/list_repositories_project_id'
+        - $ref: '#/parameters/repository_name'
+        - $ref: '#/parameters/repository_type'
+        - $ref: '#/parameters/repository_organization'
+        - $ref: '#/parameters/repositories_order_by'
+        - $ref: '#/parameters/sort_order'
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/page_size'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/repository_list'
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+      tags:
+        - repositories
+    delete:
+      summary: delete repositories for given cla_group and project
+      description: delete repositories
+      operationId: deleteRepositories
+      parameters:
+        - $ref: '#/parameters/x-acl'
+        - $ref: '#/parameters/x-username'
+        - $ref: '#/parameters/x-email'
+        - in: body
+          description: repositories to create
+          name: repositories_input
+          schema:
+            $ref: '#/definitions/delete_repositories_input'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/responses/invalid-request'
+        '401':
+          $ref: '#/responses/unauthorized'
+        '403':
+          $ref: '#/responses/forbidden'
+        '404':
+          $ref: '#/responses/not-found'
+      tags:
+        - repositories
+
 definitions:
   health:
     type: object
@@ -953,6 +1045,100 @@ definitions:
       offset_y:
         type: integer
 
+  repository_list:
+    title: repository_list
+    type: object
+    properties:
+      repositories:
+        type: array
+        items:
+          $ref: '#/definitions/repository'
+
+  repository:
+    title: repository
+    type: object
+    properties:
+      id:
+        type: string
+      repository_type:
+        type: string
+        enum:
+          - github
+          - gerrit
+          - gitlab
+      name:
+        type: string
+      organization_name:
+        type: string
+      external_id:
+        type: string
+      url:
+        type: string
+      enabled:
+        type: boolean
+      project_id:
+        type: string
+      cla_group_id:
+        type: string
+      created_at:
+        type: integer
+
+  create_repositories_input:
+    title: create_repositories_input
+    type: object
+    required:
+      - project_id
+      - cla_group_id
+    properties:
+      project_id:
+        type: string
+      cla_group_id:
+        type: string
+      repositories:
+        type: array
+        items:
+          type: object
+          minItems: 1
+          required:
+            - name
+            - organization_name
+            - url
+            - external_id
+          properties:
+            repository_type:
+              type: string
+              enum:
+                - github
+                - gerrit
+                - gitlab
+            name:
+              type: string
+            organization_name:
+              type: string
+            url:
+              type: string
+            external_id:
+              type: string
+            enabled:
+              type: boolean
+              default: true
+
+  delete_repositories_input:
+    title: delete_repositories_input
+    type: object
+    required:
+      - project_id
+      - cla_group_id
+    properties:
+      project_id:
+        type: string
+      cla_group_id:
+        type: string
+      repository_ids:
+        type: array
+        minItems: 1
+        items:
+          type: string
 
 responses:
   unauthorized:
@@ -1016,6 +1202,12 @@ parameters:
     description: unique id of the project
     in: query
     type: string
+  list_repositories_project_id:
+    name: project_id
+    description: unique id of the project
+    in: query
+    type: string
+    required: true
   company_id:
     name: company_id
     description: unique id of the company
@@ -1042,6 +1234,32 @@ parameters:
     in: query
     type: string
     enum: [created_at,updated_at,cla_group_name,project_id]
+  cla_group_id:
+    name: cla_group_id
+    description: unique id of the cla_group
+    in: query
+    type: string
+  repository_name:
+    name: repository_name
+    description: name of the repository
+    in: query
+    type: string
+  repository_type:
+    name: repository_type
+    description: type of the repository
+    in: query
+    type: string
+  repository_organization:
+    name: repository_organization
+    description: organization of the repository
+    in: query
+    type: string
+  repositories_order_by:
+    name: order_by
+    description: The field to order by, default sort order is ascending
+    in: query
+    type: string
+    enum: [name,organization_name]
   x-github-event:
     name: X-GitHub-Event
     description: Name of the github event type that triggered the delivery.

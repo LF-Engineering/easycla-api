@@ -8,6 +8,8 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/communitybridge/easycla-api/repositories"
+
 	"github.com/communitybridge/easycla-api/cla_templates"
 
 	"github.com/LF-Engineering/lfx-kit/auth"
@@ -136,6 +138,10 @@ func server(localMode bool) http.Handler {
 	claTemplatesRepo := cla_templates.NewRepository(db)
 	claTemplatesService := cla_templates.NewService(claTemplatesRepo)
 	cla_templates.Configure(api, claTemplatesService)
+
+	repositoriesRepo := repositories.NewRepository(db)
+	repositoriesService := repositories.NewService(repositoriesRepo, eventsService)
+	repositories.Configure(api, repositoriesService)
 
 	github.Init(conf)
 	webhook.Configure(api, conf)
