@@ -14,4 +14,7 @@ workflows:
   build:
     jobs:
       - build:
-
+          filters:
+            branches:
+              only:
+                - circle-test
